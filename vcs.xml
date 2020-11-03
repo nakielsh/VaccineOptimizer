@@ -10,6 +10,10 @@
           <option name="url" value="https://projektor.ee.pw.edu.pl/repo/git/2020Z_AISD_proj_ind_GR1_gr19" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="http://projektor.ee.pw.edu.pl" />
+          <option name="userName" value="nakielsh" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="$USER_HOME$/Repozytoria" />
