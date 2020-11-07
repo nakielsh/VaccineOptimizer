@@ -1,0 +1,152 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\setcounter{secnumdepth}{0}
+ \usepackage[table,xcdraw]{xcolor}
+ \usepackage[margin=1.5in]{geometry}
+ \usepackage[T1]{fontenc}
+\usepackage[tableposition=top]{caption}
+\usepackage{tabularx}
+
+
+\title{Specyfikacja funkcjonalna projektu indywidualnego \textbf{AiSD GR1}}
+\author{Hubert Nakielski}
+\date{Listopad 2020}
+
+
+\begin{document}
+\maketitle
+
+\section{Cel projektu}
+Celem projektu jest minimalizacja kosztów sprzedaży szczepionek przy jednoczesnym
+ zapewnieniu dostaw do wszystkich aptek. Projekt powinien dostarczać najbardziej opłacalną 
+ dla danych aptek konfigurację.
+ 
+\section{Dane wejściowe}
+Na wejście powinien być dostarczany plik wejściowy w formacie o rozszerzeniu \textit{.inp}, podający informacje o: \\
+\begin{itemize}
+
+
+\item
+Producentach szczepionek \\
+(id producenta, nazwa, dzienna produkcja)\\
+\item
+Aptekach\\ (id apteki, nazwa, dzienne zapotrzebowanie)\\
+\item
+Połączeniach producentów i aptek \\(id producenta, id apteki, dzienna maksymalna liczba dostarczanych szczepionek, koszt 
+szczepionki [zł])
+
+\end{itemize}
+
+
+\begin{table}[h!]
+\caption{Producenci }
+\makebox[\linewidth]{
+\begin{tabular}{|c|c|c|}
+\hline
+\rowcolor[HTML]{C0C0C0} 
+\textbf{id producenta} int  & \textbf{nazwa} String      & \textbf{dzienna produkcja}  int \\ \hline
+0               & BioTech 2.0             & 900                      \\ \hline
+1               & Eko Polska 2020         & 1300                     \\ \hline
+2               & Post-Covid Sp. z o.o.   & 1100                     \\ \hline
+\end{tabular}
+}
+\end{table}
+
+
+\begin{table}[hbt!]
+\caption{Apteki }
+\makebox[\linewidth]{
+\begin{tabular}{|c|c|c|}
+\hline
+\rowcolor[HTML]{C0C0C0} 
+\textbf{id apteki} int & \textbf{nazwa}  String                & \textbf{dzienne zapotrzebowanie} int \\ \hline
+0         & CentMedEko Centrala    & 450                     \\ \hline
+1         & CentMedEko             & 690                     \\ \hline
+2         & CentMedEko Nowogrodzka & 1200                    \\ \hline
+\end{tabular}
+}
+\end{table}
+
+\begin{table}[h!]
+\caption{Połączenia producentów i aptek}
+\makebox[\linewidth]{
+\begin{tabular}{|c|c|c|c|}
+\hline
+\rowcolor[HTML]{C0C0C0} 
+\textbf{id producenta} int & \cellcolor[HTML]{C0C0C0}\textbf{id apteki} int & \textbf{\begin{tabular}[c]{@{}c@{}}dzienna maksymalna liczba\\  dostarczanych szczepionek\end{tabular}}  int & \textbf{koszt szczepionki {[}zł{]}} double\\ \hline
+0                      & 0                                          & 800                                                          & 70.5                                \\ \hline
+0                      & 1                                          & 600                                                          & 70                                  \\ \hline
+0                      & 2                                          & 750                                                          & 90.99                               \\ \hline
+1                      & 0                                          & 900                                                          & 100                                 \\ \hline
+1                      & 1                                          & 600                                                          & 80                                  \\ \hline
+1                      & 2                                          & 450                                                          & 70                                  \\ \hline
+2                      & 0                                          & 900                                                          & 80                                  \\ \hline
+2                      & 1                                          & 900                                                          & 90                                  \\ \hline
+2                      & 2                                          & 300                                                          & 100                                 \\ \hline
+\end{tabular}
+}
+\end{table}
+.\\\\\\\\\\\\
+ Dla powyższych danych $\Uparrow$  plik wejściowy powinien wyglądać następująco:\\\\
+\# Producenci szczepionek (id | nazwa | dzienna produkcja)\\
+0 | BioTech 2.0 | 900\\
+1 | Eko Polska 2020 | 1300\\
+2 | Post-Covid Sp. z o.o. | 1100\\
+\# Apteki (id | nazwa | dzienne zapotrzebowanie)\\
+0 | CentMedEko Centrala | 450\\
+1 | CentMedEko 24h | 690\\
+2 | CentMedEko Nowogrodzka | 1200\\
+\# Połączenia producentów i aptek (id producenta | id apteki | dzienna maksymalna liczba dostarczanych szczepionek | koszt szczepionki [zł] )\\
+0 | 0 | 800 | 70.5\\
+0 | 1 | 600 | 70\\
+0 | 2 | 750 | 90.99\\
+1 | 0 | 900 | 100\\
+1 | 1 | 600 | 80\\
+1 | 2 | 450 | 70\\
+2 | 0 | 900 | 80\\
+2 | 1 | 900 | 90\\
+2 | 2 | 300 | 100\\
+
+
+
+
+\clearpage
+
+\section{Dane wyjściowe}
+Program na wyjściu przekazuje dane najbardziej opłacalnej konfiguracji połączeń pomiędzy producentami,
+a aptekami. Wygenerowane dane będą przekazane w poniższym formacie:\\\\
+\textit{Nazwa producenta} -> \textit{Nazwa apteki} [Koszt = \textit{ilość kupionych szczepionek} * \textit{cena jednej szczepionki} = \textit{koszt kupionych szczepionek w PLN}]\\
+...\\
+...\\
+Opłaty całkowite: \textit{opłata całkowita w PLN}\\\\
+\emph{Przykład:}\\
+BioTech 2.0\hspace{7mm} -> CentMedEko Centrala [Koszt = 300 * 70.5 = 21150 zł]\\
+Eko Polska 2020  -> CentMedEko Centrala [Koszt = 150 * 100 = 15000 zł]\\
+/*\\
+...\\
+kolejne wiersze opisujące ustalone połączenia pomiędzy producentami, a aptekami\\
+...\\
+*/\\
+Opłaty całkowite: 36150 zł\\
+
+\section{Teoria}
+bgbdb
+
+
+\section{Komunikaty błędów}
+Program weryfikuje poprawność pliku wejściowego oraz danych wejściowych i wyświetla odpowiedni komunikat do wystąpionego błędu. \\ Błędy wykrywalne przez program:\\\\
+- łączna dzienna produkcja szczepionek będzie mniejsza niż łączne dzienne zapotrzebowanie;\\
+- wystąpi błąd w składni pliku wejściowego;\\
+- liczba połączeń producentów i aptek nie jest równa iloczynowi ilości producentów i aptek;\\
+- nazwy bądź id aptek się powtarzają;\\
+- nazwy bądź id producentów się powtarzają.\\
+
+
+
+
+\end{document}
