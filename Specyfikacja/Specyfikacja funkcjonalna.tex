@@ -11,6 +11,15 @@
  \usepackage[T1]{fontenc}
 \usepackage[tableposition=top]{caption}
 \usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
 
 
 \title{Specyfikacja funkcjonalna projektu indywidualnego \textbf{AiSD GR1}}
@@ -28,68 +37,64 @@ Celem projektu jest minimalizacja kosztów sprzedaży szczepionek przy jednoczes
  
 \section{Dane wejściowe}
 Na wejście powinien być dostarczany plik wejściowy w formacie o rozszerzeniu \textit{.inp}, podający informacje o: \\
-\begin{itemize}
-
-
-\item
-Producentach szczepionek \\
-(id producenta, nazwa, dzienna produkcja)\\
-\item
-Aptekach\\ (id apteki, nazwa, dzienne zapotrzebowanie)\\
-\item
-Połączeniach producentów i aptek \\(id producenta, id apteki, dzienna maksymalna liczba dostarczanych szczepionek, koszt 
-szczepionki [zł])
-
-\end{itemize}
-
+	\begin{itemize}
+		\item
+		Producentach szczepionek \\
+		(id producenta, nazwa, dzienna produkcja)\\
+		\item
+		Aptekach\\ (id apteki, nazwa, dzienne zapotrzebowanie)\\
+		\item
+		Połączeniach producentów i aptek \\(id producenta, id apteki, dzienna maksymalna liczba dostarczanych szczepionek, koszt 
+		szczepionki [zł])
+	\end{itemize}
 
 \begin{table}[h!]
-\caption{Producenci }
-\makebox[\linewidth]{
-\begin{tabular}{|c|c|c|}
-\hline
-\rowcolor[HTML]{C0C0C0} 
-\textbf{id producenta} int  & \textbf{nazwa} String      & \textbf{dzienna produkcja}  int \\ \hline
-0               & BioTech 2.0             & 900                      \\ \hline
-1               & Eko Polska 2020         & 1300                     \\ \hline
-2               & Post-Covid Sp. z o.o.   & 1100                     \\ \hline
-\end{tabular}
-}
+	\caption{Producenci }
+	\makebox[\linewidth]{
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		\textbf{id producenta} int  & \textbf{nazwa} String      & \textbf{dzienna produkcja}  int \\ \hline
+		0               & BioTech 2.0             & 900                      \\ \hline
+		1               & Eko Polska 2020         & 1300                     \\ \hline
+		2               & Post-Covid Sp. z o.o.   & 1100                     \\ \hline
+	\end{tabular}
+	}
 \end{table}
 
 
 \begin{table}[hbt!]
-\caption{Apteki }
-\makebox[\linewidth]{
-\begin{tabular}{|c|c|c|}
-\hline
-\rowcolor[HTML]{C0C0C0} 
-\textbf{id apteki} int & \textbf{nazwa}  String                & \textbf{dzienne zapotrzebowanie} int \\ \hline
-0         & CentMedEko Centrala    & 450                     \\ \hline
-1         & CentMedEko             & 690                     \\ \hline
-2         & CentMedEko Nowogrodzka & 1200                    \\ \hline
-\end{tabular}
-}
+	\caption{Apteki }
+	\makebox[\linewidth]{
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		\textbf{id apteki} int & \textbf{nazwa}  String                & \textbf{dzienne zapotrzebowanie} int \\ \hline
+		0         & CentMedEko Centrala    & 450                     \\ \hline
+		1         & CentMedEko             & 690                     \\ \hline
+		2         & CentMedEko Nowogrodzka & 1200                    \\ \hline
+	\end{tabular}
+	}
 \end{table}
 
 \begin{table}[h!]
-\caption{Połączenia producentów i aptek}
-\makebox[\linewidth]{
-\begin{tabular}{|c|c|c|c|}
-\hline
-\rowcolor[HTML]{C0C0C0} 
-\textbf{id producenta} int & \cellcolor[HTML]{C0C0C0}\textbf{id apteki} int & \textbf{\begin{tabular}[c]{@{}c@{}}dzienna maksymalna liczba\\  dostarczanych szczepionek\end{tabular}}  int & \textbf{koszt szczepionki {[}zł{]}} double\\ \hline
-0                      & 0                                          & 800                                                          & 70.5                                \\ \hline
-0                      & 1                                          & 600                                                          & 70                                  \\ \hline
-0                      & 2                                          & 750                                                          & 90.99                               \\ \hline
-1                      & 0                                          & 900                                                          & 100                                 \\ \hline
-1                      & 1                                          & 600                                                          & 80                                  \\ \hline
-1                      & 2                                          & 450                                                          & 70                                  \\ \hline
-2                      & 0                                          & 900                                                          & 80                                  \\ \hline
-2                      & 1                                          & 900                                                          & 90                                  \\ \hline
-2                      & 2                                          & 300                                                          & 100                                 \\ \hline
-\end{tabular}
-}
+	\caption{Połączenia producentów i aptek}
+	\makebox[\linewidth]{
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		\textbf{id producenta} int & \cellcolor[HTML]{C0C0C0}\textbf{id apteki} int & \textbf{\begin{tabular}[c]{@{}c@{}}dzienna maksymalna liczba\\  dostarczanych szczepionek\end{tabular}}  int & \textbf{koszt szczepionki {[}zł{]}} double\\ \hline
+		0                      & 0                                          & 800                                                          & 70.5                                \\ \hline
+		0                      & 1                                          & 600                                                          & 70                                  \\ \hline
+		0                      & 2                                          & 750                                                          & 90.99                               \\ \hline
+		1                      & 0                                          & 900                                                          & 100                                 \\ \hline
+		1                      & 1                                          & 600                                                          & 80                                  \\ \hline
+		1                      & 2                                          & 450                                                          & 70                                  \\ \hline
+		2                      & 0                                          & 900                                                          & 80                                  \\ \hline
+		2                      & 1                                          & 900                                                          & 90                                  \\ \hline
+		2                      & 2                                          & 300                                                          & 100                                 \\ \hline
+	\end{tabular}
+	}
 \end{table}
 .\\\\\\\\\\\\
  Dla powyższych danych $\Uparrow$  plik wejściowy powinien wyglądać następująco:\\\\
@@ -120,12 +125,18 @@ szczepionki [zł])
 \section{Dane wyjściowe}
 Program na wyjściu przekazuje dane najbardziej opłacalnej konfiguracji połączeń pomiędzy producentami,
 a aptekami. Wygenerowane dane będą przekazane w poniższym formacie:\\\\
-\textit{Nazwa producenta} -> \textit{Nazwa apteki} [Koszt = \textit{ilość kupionych szczepionek} * \textit{cena jednej szczepionki} = \textit{koszt kupionych szczepionek w PLN}]\\
+\textit{Nazwa producenta} -> 
+\textit{Nazwa apteki} [Koszt = 
+\textit{ilość kupionych szczepionek} * 
+\textit{cena jednej szczepionki} = 
+\textit{koszt kupionych szczepionek w PLN}]\\
 ...\\
 ...\\
-Opłaty całkowite: \textit{opłata całkowita w PLN}\\\\
+Opłaty całkowite: 
+\textit{opłata całkowita w PLN}\\\\
 \emph{Przykład:}\\
-BioTech 2.0\hspace{7mm} -> CentMedEko Centrala [Koszt = 300 * 70.5 = 21150 zł]\\
+BioTech 2.0
+\hspace{7mm} -> CentMedEko Centrala [Koszt = 300 * 70.5 = 21150 zł]\\
 Eko Polska 2020  -> CentMedEko Centrala [Koszt = 150 * 100 = 15000 zł]\\
 /*\\
 ...\\
@@ -134,9 +145,33 @@ kolejne wiersze opisujące ustalone połączenia pomiędzy producentami, a aptek
 */\\
 Opłaty całkowite: 36150 zł\\
 
-\section{Teoria}
-bgbdb
 
+\section{Struktura katalogów}
+\textcolor{orange}{2020Z\_AiSD\_proj\_ind\_GR1\_gr19}
+
+	|---\textcolor{orange}{src}
+	
+	|\hspace{4mm} |-----\textcolor{orange}{vaccine}
+
+	|\hspace{15mm}|-----\textcolor{orange}{file}
+	
+	|\hspace{15mm}|-----\textcolor{orange}{objects}
+	
+	|\hspace{15mm}|-----\textcolor{orange}{calculations}
+	
+	|
+	
+	|
+	
+	|---\textcolor{orange}{test}
+	
+	\hspace{5mm} |-----\textcolor{orange}{vaccine} 
+
+	\hspace{16mm}|-----\textcolor{orange}{file}
+	
+	\hspace{16mm}|-----\textcolor{orange}{calculations}
+
+\clearpage
 
 \section{Komunikaty błędów}
 Program weryfikuje poprawność pliku wejściowego oraz danych wejściowych i wyświetla odpowiedni komunikat do wystąpionego błędu. \\ Błędy wykrywalne przez program:\\\\
@@ -146,7 +181,16 @@ Program weryfikuje poprawność pliku wejściowego oraz danych wejściowych i wy
 - nazwy bądź id aptek się powtarzają;\\
 - nazwy bądź id producentów się powtarzają.\\
 
+\section{Uruchomienie programu}
+Do uruchomienia programu potrzebne jest zainstalowane oprogramowanie Java 14.0.1, możliwe do pobrania \href{https://jdk.java.net/archive/}{tutaj}.\\\\
+Aby uruchomić program należy, będąc w odpowiednim pliku obejmującym, wpisać dwie komendy w terminalu:\\
+\begin{center}
+\textit{javac Main.java\\
+java Main.java <ścieżka do pliku wejściowego>}
 
+\end{center}
 
+\section{Testowanie}
+Do testowania kodu użyję narzędzia JUnit, a działanie algorytmu liczącego przetestuję ręcznie.
 
 \end{document}
