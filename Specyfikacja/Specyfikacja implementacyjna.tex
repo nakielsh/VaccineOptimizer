@@ -1,0 +1,58 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\setcounter{secnumdepth}{0}
+ \usepackage[table,xcdraw]{xcolor}
+ \usepackage[margin=1.5in]{geometry}
+ \usepackage[T1]{fontenc}
+\usepackage[tableposition=top]{caption}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+
+
+\title{Specyfikacja implementacyjna projektu indywidualnego \textbf{AiSD GR1}}
+\author{Hubert Nakielski}
+\date{Listopad 2020}
+
+\begin{document}
+\maketitle
+
+\section{Informacje ogólne}
+
+\section{Opis modułów}
+
+\subsection{Pakiet \textit{file}}
+Pakiet ten będzie odpowiedzialny za wszystkie czynności związane z plikami wejściowymi i wyjściowymi. 
+
+\section{Opis klas }
+\subsection{Klasa \textit{ConfigurationIO}}
+\subsubsection{loadFromFile(String filePath)}
+Metoda odpowiedzialna za czytanie pliku wejściowego, używa metody parseLine().
+\subsubsection{loadToFile(File file)}
+Metoda odpowiedzialna za wpisywanie gotowej konfiguracji do pliku wyjściowego.
+\subsubsection{parseLine(String line)}
+Metoda czytająca pojedynczą linię w pliku.
+
+\section{Testowanie}
+
+\section{Diagram klas}
+
+\subsection{Użyte narzędzia}
+
+\subsection{Konwencja}
+
+\subsection{Warunki brzegowe}
+
+\end{document}
