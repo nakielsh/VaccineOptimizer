@@ -29,14 +29,15 @@
 
 \begin{document}
 \maketitle
-
+\section{Nazwa programu}
+VaccineOptimizer
 \section{Cel projektu}
 Celem projektu jest minimalizacja kosztów sprzedaży szczepionek przy jednoczesnym
  zapewnieniu dostaw do wszystkich aptek. Projekt powinien dostarczać najbardziej opłacalną 
  dla danych aptek konfigurację.
  
 \section{Dane wejściowe}
-Na wejście powinien być dostarczany plik wejściowy w formacie o rozszerzeniu \textit{.inp}, podający informacje o: \\
+Na wejście powinien być dostarczany plik wejściowy w formacie o rozszerzeniu \textcolor{orange}{\textit{.inp}}, podający informacje o: \\
 	\begin{itemize}
 		\item
 		Producentach szczepionek \\
@@ -96,7 +97,7 @@ Na wejście powinien być dostarczany plik wejściowy w formacie o rozszerzeniu 
 	\end{tabular}
 	}
 \end{table}
-.\\\\\\\\\\\\
+
  Dla powyższych danych $\Uparrow$  plik wejściowy powinien wyglądać następująco:\\\\
 \# Producenci szczepionek (id | nazwa | dzienna produkcja)\\
 0 | BioTech 2.0 | 900\\
@@ -123,7 +124,7 @@ Na wejście powinien być dostarczany plik wejściowy w formacie o rozszerzeniu 
 \clearpage
 
 \section{Dane wyjściowe}
-Program na wyjściu przekazuje dane najbardziej opłacalnej konfiguracji połączeń pomiędzy producentami,
+Program na wyjście przekazuje, do pliku znajdującego się w folderze result o nazwie \\\textcolor{orange}{result.txt}, dane najbardziej opłacalnej konfiguracji połączeń pomiędzy producentami,\\
 a aptekami. Wygenerowane dane będą przekazane w poniższym formacie:\\\\
 \textit{Nazwa producenta} -> 
 \textit{Nazwa apteki} [Koszt = 
@@ -159,6 +160,8 @@ Opłaty całkowite: 36150 zł\\
 	
 	|\hspace{15mm}|-----\textcolor{orange}{calculations}
 	
+	|\hspace{15mm}|-----\textcolor{orange}{result}
+	
 	|
 	
 	|
@@ -183,12 +186,15 @@ Program weryfikuje poprawność pliku wejściowego oraz danych wejściowych i wy
 
 \section{Uruchomienie programu}
 Do uruchomienia programu potrzebne jest zainstalowane oprogramowanie Java 14.0.1, możliwe do pobrania \href{https://jdk.java.net/archive/}{tutaj}.\\\\
-Aby uruchomić program należy, będąc w odpowiednim pliku obejmującym, wpisać dwie komendy w terminalu:\\
-\begin{center}
-\textit{javac Main.java\\
-java Main.java <ścieżka do pliku wejściowego>}
+Aby uruchomić program należy, będąc w odpowiednim pliku obejmującym, wpisać komendę w terminalu:\\
 
-\end{center}
+\textit{java -jar VaccineOptimizer.jar}\\\\
+A następnie, po prośbie programu, podać ścieżkę pliku wejściowego:\\
+
+\textit{Proszę podać ścieżkę pliku wejściowego: }
+
+\textit{<ścieżka pliku wejściowego.inp>}\\\\
+Program utworzy plik z wynikami w folderze \textcolor{orange}{result}.
 
 \section{Testowanie}
 Do testowania kodu użyję narzędzia JUnit, a działanie algorytmu liczącego przetestuję ręcznie.
