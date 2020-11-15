@@ -1,6 +1,7 @@
 /Specyfikacja/Specyfikacja funkcjonalna.tex
 .idea/
 ._mac/
+.out/
 .codestyles/
 *.aux
 *.gz
