@@ -266,13 +266,23 @@ urlcolor=cyan,
      
      
     \section{Testowanie}
-    DODAJ
-
+ 
     \subsection{Użyte narzędzia}
-    DODAJ
+    Do testowania użyję narzędzia JUnit. W testach sprawdzę poprawne działanie poszczególnych metod. Wyszukiwanie optymalnego rozwiązania w programie przetestuję manualnie dla różnych zestawów danych - w programie Microsoft Excel przygotowałem gotowy arkusz optymalizujący dane wejściowe inną metodą. Planuję porównać ze sobą oba wyniki. Przetestuję też wyrzucanie odpowiednich błędów dla niepoprawnego pliku wejściowego.
 
     \subsection{Konwencja}
-    DODAJ
+    Nazewnictwo metod testujących powinno być zgodne z testowaną funkcjonalnością. Czyli nazwa metody powinna jasno sygnalizować co program powinien zwracać i dla jakiego scenariusza. Dla przykładu:
+    
+    źle $ \Rightarrow $ \verb|testLoadFromFile()|
+    
+    dobrze $ \Rightarrow $ \verb|should_GenerateListOfPharmacies_when_InputFileIsCorrect()|\\\\
+    Każdy test powinien być napisany zgodnie z konwencją:
+    
+   \verb| \\given|
+    
+    \verb| \\when|
+    
+    \verb| \\then|
 
     \subsection{Warunki brzegowe}
     DODAJ
