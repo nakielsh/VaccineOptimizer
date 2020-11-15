@@ -3,11 +3,13 @@ package vaccine.objects;
 public class Connection {
 
     Manufacturer manufacturer;
+    Pharmacy pharmacy;
     int quantity;
     double price;
 
-    public Connection(Manufacturer manufacturer, int quantity, double price) {
+    public Connection(Manufacturer manufacturer, Pharmacy pharmacy, int quantity, double price) {
         this.manufacturer = manufacturer;
+        this.pharmacy = pharmacy;
         this.quantity = quantity;
         this.price = price;
     }
@@ -22,5 +24,13 @@ public class Connection {
 
     public double getPrice() {
         return price;
+    }
+
+    public Pharmacy getPharmacy() {
+        return pharmacy;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

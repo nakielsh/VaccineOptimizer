@@ -31,7 +31,7 @@ public class ConfigurationIO {
                     line = reader.readLine();
                     if (line == null || isPharmaciesInfo(line) || isConnectionsInfo(line)) break;
 
-                    parseManufacturersLine(line, manufacturerList);
+                    parseManufacturersLine(line);
                 }
             }
 
@@ -40,7 +40,7 @@ public class ConfigurationIO {
                     line = reader.readLine();
                     if (line == null || isManufacturersInfo(line) || isConnectionsInfo(line)) break;
 
-                    parsePharmaciesLine(line, pharmacyList);
+                    parsePharmaciesLine(line);
                 }
             }
 
@@ -70,13 +70,13 @@ public class ConfigurationIO {
         return line.startsWith("#") && line.contains("Połączenia producentów i aptek");
     }
 
-    private void parseManufacturersLine(String line, List<Manufacturer> manufacturerList) {
+    private void parseManufacturersLine(String line) {
         String[] args = line.split(" \\| ");
         Manufacturer temp = new Manufacturer(parseInt(args[0]), args[1], parseInt(args[2]));
         manufacturerList.add(temp);
     }
 
-    private void parsePharmaciesLine(String line, List<Pharmacy> pharmacyList) {
+    private void parsePharmaciesLine(String line) {
         String[] args = line.split(" \\| ");
         Pharmacy temp = new Pharmacy(parseInt(args[0]), args[1], parseInt(args[2]));
         pharmacyList.add(temp);
@@ -89,10 +89,23 @@ public class ConfigurationIO {
 
                 for (Manufacturer manufacturer : manufacturerList)
                     if (manufacturer.getId() == parseInt(args[0]))
-                        pharmacy.addConnection(manufacturer, parseInt(args[2]), parseDouble(args[3]));
+                        pharmacy.addConnection(manufacturer, pharmacy, parseInt(args[2]), parseDouble(args[3]));
             }
         }
     }
+
+    public void saveToFile(List<Pharmacy> pharmacyList) {
+
+    }
+
+    public List<Pharmacy> getPharmacyList() {
+        return pharmacyList;
+    }
+
+    public List<Manufacturer> getManufacturerList() {
+        return manufacturerList;
+    }
+
 
 
     public static void main(String[] args) throws IOException {

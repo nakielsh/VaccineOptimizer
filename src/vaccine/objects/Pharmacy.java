@@ -8,6 +8,7 @@ public class Pharmacy {
     private String name;
     private int need;
     private List<Connection> connectionList = new ArrayList<>();
+    private int vamFactor;
 
     public Pharmacy(int id, String name, int need) {
         this.id = id;
@@ -31,8 +32,15 @@ public class Pharmacy {
         return connectionList;
     }
 
-    public void addConnection(Manufacturer manufacturer, int quantity, double price){
-        connectionList.add(new Connection(manufacturer, quantity, price));
+    public void addConnection(Manufacturer manufacturer,Pharmacy pharmacy, int quantity, double price) {
+        connectionList.add(new Connection(manufacturer, pharmacy, quantity, price));
     }
 
+    public int getVamFactor() {
+        return vamFactor;
+    }
+
+    public void setVamFactor(int vamFactor) {
+        this.vamFactor = vamFactor;
+    }
 }
