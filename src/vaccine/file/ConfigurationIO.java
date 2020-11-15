@@ -7,7 +7,8 @@ import vaccine.objects.Pharmacy;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
@@ -25,8 +26,8 @@ public class ConfigurationIO {
             String line = reader.readLine();
             if (line == null) break;
 
-            if(isManufacturersInfo( line)) {
-                while(true) {
+            if (isManufacturersInfo(line)) {
+                while (true) {
                     line = reader.readLine();
                     if (line == null || isPharmaciesInfo(line) || isConnectionsInfo(line)) break;
 
@@ -34,8 +35,8 @@ public class ConfigurationIO {
                 }
             }
 
-            if(isPharmaciesInfo( line)) {
-                while(true) {
+            if (isPharmaciesInfo(line)) {
+                while (true) {
                     line = reader.readLine();
                     if (line == null || isManufacturersInfo(line) || isConnectionsInfo(line)) break;
 
@@ -43,8 +44,8 @@ public class ConfigurationIO {
                 }
             }
 
-            if(isConnectionsInfo(line)) {
-                while(true) {
+            if (isConnectionsInfo(line)) {
+                while (true) {
                     line = reader.readLine();
                     if (line == null || isManufacturersInfo(line) || isPharmaciesInfo(line)) break;
 
@@ -57,43 +58,37 @@ public class ConfigurationIO {
 
     }
 
-    private boolean isPharmaciesInfo( String line){
-        if( line.startsWith("#") && line.contains("Apteki") )
-            return true;
-        else return false;
+    private boolean isPharmaciesInfo(String line) {
+        return line.startsWith("#") && line.contains("Apteki");
     }
 
-    private boolean isManufacturersInfo( String line){
-        if( line.startsWith("#") && line.contains("Producenci szczepionek") )
-            return true;
-        else return false;
+    private boolean isManufacturersInfo(String line) {
+        return line.startsWith("#") && line.contains("Producenci szczepionek");
     }
 
-    private boolean isConnectionsInfo( String line){
-        if( line.startsWith("#") && line.contains("Połączenia producentów i aptek") )
-            return true;
-        else return false;
+    private boolean isConnectionsInfo(String line) {
+        return line.startsWith("#") && line.contains("Połączenia producentów i aptek");
     }
 
-    private void parseManufacturersLine(String line, List<Manufacturer> manufacturerList){
+    private void parseManufacturersLine(String line, List<Manufacturer> manufacturerList) {
         String[] args = line.split(" \\| ");
         Manufacturer temp = new Manufacturer(parseInt(args[0]), args[1], parseInt(args[2]));
         manufacturerList.add(temp);
     }
 
-    private void parsePharmaciesLine(String line, List<Pharmacy> pharmacyList){
+    private void parsePharmaciesLine(String line, List<Pharmacy> pharmacyList) {
         String[] args = line.split(" \\| ");
         Pharmacy temp = new Pharmacy(parseInt(args[0]), args[1], parseInt(args[2]));
         pharmacyList.add(temp);
     }
 
-    private void parseConnectionsLine(String line){
+    private void parseConnectionsLine(String line) {
         String[] args = line.split(" \\| ");
-        for (Pharmacy pharmacy : pharmacyList){
-            if(pharmacy.getId() == parseInt(args[1])){
+        for (Pharmacy pharmacy : pharmacyList) {
+            if (pharmacy.getId() == parseInt(args[1])) {
 
-                for(Manufacturer manufacturer : manufacturerList)
-                    if(manufacturer.getId() == parseInt(args[0]))
+                for (Manufacturer manufacturer : manufacturerList)
+                    if (manufacturer.getId() == parseInt(args[0]))
                         pharmacy.addConnection(manufacturer, parseInt(args[2]), parseDouble(args[3]));
             }
         }
@@ -104,12 +99,12 @@ public class ConfigurationIO {
 
         ConfigurationIO configurationIO = new ConfigurationIO();
         configurationIO.loadFromFile(configurationIO.path);
-        for( Pharmacy pharmacy : configurationIO.pharmacyList ){
+        for (Pharmacy pharmacy : configurationIO.pharmacyList) {
             System.out.println("ID: " + pharmacy.getId() +
                     ", NAME: " + pharmacy.getName() +
                     ", NEED: " + pharmacy.getNeed() +
                     "\n");
-            for(Connection connection : pharmacy.getConnectionList()){
+            for (Connection connection : pharmacy.getConnectionList()) {
                 System.out.println("\tMANUFACTURER: " + connection.getManufacturer().getName() +
                         ", QUANTITY: " + connection.getQuantity() +
                         ", PRICE: " + connection.getPrice() +
@@ -118,7 +113,7 @@ public class ConfigurationIO {
         }
         System.out.println("\n\n");
 
-        for( Manufacturer manufacturer : configurationIO.manufacturerList){
+        for (Manufacturer manufacturer : configurationIO.manufacturerList) {
             System.out.println("ID: " + manufacturer.getId() +
                     ", NAME: " + manufacturer.getName() +
                     ", PRODUCTION: " + manufacturer.getDaily_production() +
