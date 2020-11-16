@@ -53,6 +53,9 @@ urlcolor=cyan,
     \subsection{Folder \textit{vaccine.result}}
     W tym miejscu będzie zapisywany plik wyjściowy
 
+    \subsection{Pakiet \textit{vaccine.exceptions}}
+    Będą tu trzymane wszystkie wyjątki, które mogą zostać wyrzucone przez program
+
 
     \section{Opis klas }
 
@@ -228,64 +231,85 @@ urlcolor=cyan,
     Wywołuje metodę \textit{saveToFile(List<Pharmacy>)} z klasy ConfigurationIO podając przy tym gotową listę aptek \verb|connectionList| ( zawierającą listę połączeń w odpowiedniej już konfiguracji)\\
     Wartość zwracana: \verb|void|
 
+    \subsection{Klasa \textit{Main}}
+    Klasa ta pobiera ścieżkę do pliku od użytkownika i wywołuje program.
+
 
     \section{Logika liczenia najtańszej konfiguracji}
     \newcommand\tab[1][1cm]{\hspace*{#1}}
     Liczenie odbywać się będzie używając metody VAM. Dla tej metody utworzymy dodatkowe zmienne (współczynnik VAM) dla każdego obiektu ( apteka / producent ).\\\\
     \textbf{1. Liczę wspólczynnik VAM}
-    
+
     1.1 dla każdego obiektu sprawdzam cenę poszczególnego połączenia, które jest związane z danym obiektem)
-    
+
     1.2 wybieram minimum z tych cen;
-    
+
     1.3 wybieram drugie minimum z tych cen;
-    
-    1.4 obliczam różnicę z tych dwóch minimów.\\\\ 
+
+    1.4 obliczam różnicę z tych dwóch minimów.\\\\
     \textbf{2. Znajduję największy współczynnik}
-    
+
     2.1 wybieram maximum ze współczynników wszystkich obiektów;
-    
-    2.2 zapamiętuję aptekę, dla której ten współczynnik wystąpił.\\\\
+
+    2.2 zapamiętuję obiekt, dla którego ten współczynnik wystąpił.\\\\
     \textbf{3. Ustalam najtańszą konfigurację dla podanej apteki}
-    
-    3.1 dla zapamiętanej apteki znajduję połączenie, dla którego cena szczepionki będzie najniższa i zapamiętuję je;
-    
+
+    3.1 dla zapamiętanego obiektu znajduję połączenie, dla którego cena szczepionki będzie najniższa i zapamiętuję je;
+
     3.2 ustalam najwyższą ilość szczepionek dla zapamiętanego połączenia, spełniającą warunki:\\
     \tab •suma kupionych przez aptekę szczepionek nie przekracza dziennego \\\tab zapotrzebowania\\
     \tab •suma sprzedanych przez producenta szczepionek nie przekracza dziennej produkcji\\
-     \tab •ilość kupionych/sprzedanych szczepionek w danym połączeniu nie przekracza\\\tab  dziennej maksymalnej liczby dostarczanych szczepionek przez producenta do apteki
-     
-     3.3 dla tej samej apteki znajduję drugie najtańsze połączenie, dla którego cena szczepionki będzie najniższa i zapamiętuję je;
-     
-     3.4 ponownie wykonuję punkt 3.2;
-     
-     3.5 kończę ustalanie najtańszej konfiguracji dla tej apteki, gdy suma kupionych przez aptekę szczepionek będzie równa dziennemu zapotrzebowaniu.\\
-     \textbf{4. Wracam do punktu 1.  bez uwzględniania już zapełnionych aptek}
-     
-     4.1 kończę, gdy każda apteka ma już ustaloną konfigurację
-     
-     
+    \tab •ilość kupionych/sprzedanych szczepionek w danym połączeniu nie przekracza\\\tab  dziennej maksymalnej liczby dostarczanych szczepionek przez producenta do apteki
+
+    3.3 dla tej samej apteki znajduję drugie najtańsze połączenie, dla którego cena szczepionki będzie najniższa i zapamiętuję je;
+
+    3.4 ponownie wykonuję punkt 3.2;
+
+    3.5 kończę ustalanie najtańszej konfiguracji dla tej apteki, gdy suma kupionych przez aptekę szczepionek będzie równa dziennemu zapotrzebowaniu.\\
+    \textbf{4. Wracam do punktu 1. bez uwzględniania już zapełnionych aptek}
+
+    4.1 kończę, gdy każda apteka ma już ustaloną konfigurację
+
+
     \section{Testowanie}
- 
+
     \subsection{Użyte narzędzia}
     Do testowania użyję narzędzia JUnit. W testach sprawdzę poprawne działanie poszczególnych metod. Wyszukiwanie optymalnego rozwiązania w programie przetestuję manualnie dla różnych zestawów danych - w programie Microsoft Excel przygotowałem gotowy arkusz optymalizujący dane wejściowe inną metodą. Planuję porównać ze sobą oba wyniki. Przetestuję też wyrzucanie odpowiednich błędów dla niepoprawnego pliku wejściowego.
 
     \subsection{Konwencja}
     Nazewnictwo metod testujących powinno być zgodne z testowaną funkcjonalnością. Czyli nazwa metody powinna jasno sygnalizować co program powinien zwracać i dla jakiego scenariusza. Dla przykładu:
-    
+
     źle $ \Rightarrow $ \verb|testLoadFromFile()|
-    
+
     dobrze $ \Rightarrow $ \verb|should_GenerateListOfPharmacies_when_InputFileIsCorrect()|\\\\
     Każdy test powinien być napisany zgodnie z konwencją:
-    
-   \verb| \\given|
-    
+
+    \verb| \\given|
+
     \verb| \\when|
-    
+
     \verb| \\then|
 
-    \subsection{Warunki brzegowe}
-    DODAJ
+    \subsection{Wyjątki}
+    Podczas testowania sprawdzę czy program radzi sobie z niepożądanymi sytuacjami - powinien dla różnych przypadków wyrzucać odpowiednie wyjątki, takie jak:\\
+
+    \textbf{ ExistingNameExcepion;}\\
+    Wyrzucany, gdy w pliku wejściowym występują dwie takie same nazwy aptek, bądź producentów.\\
+
+    \textbf{ ExistingIdExcepion;}\\
+    Wyrzucany, gdy w pliku wejściowym występują dwa takie same id aptek, bądź producentów.\\
+
+    \textbf{ HigherNeedThanProductionExcepion;}\\
+    Wyrzucany, gdy suma zapotrzebowań wszystkich aptek przekracza sumę dziennych produkcji wszystkich producentów.\\\\\\
+
+    \textbf{ WrongConnectionNumberExcepion;}\\
+    Wyrzucany, gdy liczba połączeń w pliku wejściowym nie jest równa iloczynowi ilości aptek i producentów.\\
+
+    \textbf{ ConfigurationImpossibleToCreateException;}\\
+    Wyrzucany, gdy, pomimo wyższej łącznej produkcji od łącznego zapotrzebowania, przez dodatkowe ograniczenia w umowach ( połączeniach ) nie istnieje konfiguracja zapełniająca wszystkie apteki.\\
+
+    \textbf{ FileStructureException;}\\
+    Wyrzucany, gdy struktura pliku jest niepoprawna - nagłówki w pliku przykładowym i pliku wejściowym muszą być jednakowe co do znaku. Wartości muszą być oddzielane znakiem "|"
 
 
     \section{Diagram klas}
