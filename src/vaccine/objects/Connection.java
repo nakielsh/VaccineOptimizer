@@ -4,18 +4,23 @@ public class Connection {
 
     Manufacturer manufacturer;
     Pharmacy pharmacy;
-    int quantity;
+    int maxQuantity;
     double price;
+    int quantity;
 
-    public Connection(Manufacturer manufacturer, Pharmacy pharmacy, int quantity, double price) {
+    public Connection(Manufacturer manufacturer, Pharmacy pharmacy, int maxQuantity, double price) {
         this.manufacturer = manufacturer;
         this.pharmacy = pharmacy;
-        this.quantity = quantity;
+        this.maxQuantity = maxQuantity;
         this.price = price;
     }
 
     public Manufacturer getManufacturer() {
         return manufacturer;
+    }
+
+    public int getMaxQuantity() {
+        return maxQuantity;
     }
 
     public int getQuantity() {

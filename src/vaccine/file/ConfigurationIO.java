@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static java.lang.Double.parseDouble;
@@ -88,8 +89,10 @@ public class ConfigurationIO {
             if (pharmacy.getId() == parseInt(args[1])) {
 
                 for (Manufacturer manufacturer : manufacturerList)
-                    if (manufacturer.getId() == parseInt(args[0]))
+                    if (manufacturer.getId() == parseInt(args[0])) {
                         pharmacy.addConnection(manufacturer, pharmacy, parseInt(args[2]), parseDouble(args[3]));
+                        manufacturer.addConnection(manufacturer, pharmacy, parseInt(args[2]), parseDouble(args[3]));
+                    }
             }
         }
     }
@@ -119,8 +122,9 @@ public class ConfigurationIO {
                     "\n");
             for (Connection connection : pharmacy.getConnectionList()) {
                 System.out.println("\tMANUFACTURER: " + connection.getManufacturer().getName() +
-                        ", QUANTITY: " + connection.getQuantity() +
+                        ", MAX QUANTITY: " + connection.getMaxQuantity() +
                         ", PRICE: " + connection.getPrice() +
+                        ", QUANTITY: " + connection.getQuantity() +
                         "\n");
             }
         }
@@ -131,7 +135,17 @@ public class ConfigurationIO {
                     ", NAME: " + manufacturer.getName() +
                     ", PRODUCTION: " + manufacturer.getDaily_production() +
                     "\n");
+            for (Connection connection : manufacturer.getConnectionList()) {
+                System.out.println("\tMANUFACTURER: " + connection.getManufacturer().getName() +
+                        ", MAX QUANTITY: " + connection.getMaxQuantity() +
+                        ", PRICE: " + connection.getPrice() +
+                        ", QUANTITY: " + connection.getQuantity() +
+                        "\n");
+            }
+
         }
+
+
 
 
     }

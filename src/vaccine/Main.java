@@ -17,19 +17,23 @@ public class Main {
         String path = sc.nextLine();
         configurationIO.loadFromFile(path);
         VAM vam = new VAM(configurationIO.getPharmacyList(), configurationIO.getManufacturerList());
+        vam.minimizeCost();
 
-        for (Pharmacy pharmacy : configurationIO.getPharmacyList()) {
+        for (Pharmacy pharmacy : vam.getPharmacyList()) {
             System.out.println("ID: " + pharmacy.getId() +
                     ", NAME: " + pharmacy.getName() +
                     ", NEED: " + pharmacy.getNeed() +
+                    ", VAM: " + pharmacy.getVamFactor() +
                     "\n");
             for (Connection connection : pharmacy.getConnectionList()) {
                 System.out.println("\tMANUFACTURER: " + connection.getManufacturer().getName() +
                         ", PHARMACY: " + connection.getPharmacy().getName() +
+                        ", MAX QUANTITY: " + connection.getMaxQuantity() +
                         ", QUANTITY: " + connection.getQuantity() +
                         ", PRICE: " + connection.getPrice() +
                         "\n");
             }
         }
+        System.out.println(vam.findGreatestVAMFactor().getName());
     }
 }

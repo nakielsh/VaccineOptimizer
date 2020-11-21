@@ -3,12 +3,12 @@ package vaccine.objects;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pharmacy {
+public class Pharmacy extends Company{
     private int id;
     private String name;
     private int need;
     private List<Connection> connectionList = new ArrayList<>();
-    private int vamFactor;
+    private double vamFactor;
 
     public Pharmacy(int id, String name, int need) {
         this.id = id;
@@ -36,11 +36,11 @@ public class Pharmacy {
         connectionList.add(new Connection(manufacturer, pharmacy, quantity, price));
     }
 
-    public int getVamFactor() {
+    public double getVamFactor() {
         return vamFactor;
     }
 
-    public void setVamFactor(int vamFactor) {
+    public void setVamFactor(double vamFactor) {
         this.vamFactor = vamFactor;
     }
 }
