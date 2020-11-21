@@ -23,7 +23,7 @@ public class VAM implements IVAM {
 
     @Override
     public void minimizeCost() {
-        for( Pharmacy pharmacy: pharmacyList) {
+        for (int i = 0; i < pharmacyList.size() + 1; i++) {
             calculateVAMFactor();
             adjustPossibleQuantity(findGreatestVAMFactor());
         }
@@ -36,7 +36,7 @@ public class VAM implements IVAM {
 
         for (Pharmacy pharmacy : pharmacyList) {
             for (Connection connection : pharmacy.getConnectionList()) {
-                if(connection.getQuantity() == 0 ){
+                if (connection.getQuantity() == 0 && getUnrealisedTransaction(pharmacy) > 0) {
                     prices.add(connection.getPrice());
                 }
             }
@@ -52,7 +52,7 @@ public class VAM implements IVAM {
         }
         for (Manufacturer manufacturer : manufacturerList) {
             for (Connection connection : manufacturer.getConnectionList()) {
-                if( connection.getQuantity() == 0) {
+                if (connection.getQuantity() == 0) {
                     prices.add(connection.getPrice());
                 }
             }
@@ -61,7 +61,7 @@ public class VAM implements IVAM {
             if (prices.size() > 1)
                 manufacturer.setVamFactor(prices.get(1) - prices.get(0));
             else if (prices.size() == 1)
-                manufacturer.setVamFactor(prices.get(0));
+                manufacturer.setVamFactor(0);
             else
                 manufacturer.setVamFactor(0);
 
@@ -75,14 +75,14 @@ public class VAM implements IVAM {
         Company withMaxVam = null;
         double max = 0;
         for (Pharmacy pharmacy : pharmacyList) {
-            if (pharmacy.getVamFactor() >= max) {
+            if (pharmacy.getVamFactor() >= max && getUnrealisedTransaction(pharmacy) > 0) {
                 max = pharmacy.getVamFactor();
                 withMaxVam = pharmacy;
                 assert withMaxVam instanceof Pharmacy;
             }
         }
         for (Manufacturer manufacturer : manufacturerList) {
-            if (manufacturer.getVamFactor() >= max) {
+            if (manufacturer.getVamFactor() > max) {
                 max = manufacturer.getVamFactor();
                 withMaxVam = manufacturer;
                 assert withMaxVam instanceof Manufacturer;
@@ -95,17 +95,32 @@ public class VAM implements IVAM {
     @Override
     public void adjustPossibleQuantity(Company company) {
         Pharmacy calculatedPharmacy = company.getConnectionList().get(0).getPharmacy();
-        Connection actualConnection= company.getConnectionList().get(0);
+        Connection actualConnection = company.getConnectionList().get(0);
         double minPrice = company.getConnectionList().get(0).getPrice();
-        for( Connection connection1: company.getConnectionList()) {
+        double maxPrice = 0;
 
-            for (Connection connection : company.getConnectionList()) {
-                if (connection.getPrice() <= minPrice && connection.getQuantity() > 0) {
+        for (Connection connection : company.getConnectionList()) {
+            if (connection.getPrice() > maxPrice)
+                maxPrice = connection.getPrice();
+        }
+        for (Connection connection : company.getConnectionList()) {
+            if (connection.getPrice() <= minPrice && connection.getMaxQuantity() > 0) {
+                minPrice = connection.getPrice();
+                calculatedPharmacy = connection.getPharmacy();
+                actualConnection = connection;
+            }
+        }
+        minPrice = maxPrice;
+
+        while (getUnrealisedTransaction(calculatedPharmacy) > 0) {
+
+            for (Connection connection : calculatedPharmacy.getConnectionList()) {
+                if (connection.getPrice() <= minPrice && connection.getMaxQuantity() > 0 && connection.getQuantity() == 0) {
                     minPrice = connection.getPrice();
-                    calculatedPharmacy = connection.getPharmacy();
                     actualConnection = connection;
                 }
             }
+            minPrice = maxPrice;
 
             List<Integer> doNotExceed = new ArrayList<>();
             doNotExceed.add(calculatedPharmacy.getNeed());
@@ -114,13 +129,20 @@ public class VAM implements IVAM {
             doNotExceed.add(getUnrealisedSell(actualConnection.getManufacturer()));
             Collections.sort(doNotExceed);
 
-            connection1.setQuantity(doNotExceed.get(0));
+            actualConnection.setQuantity(doNotExceed.get(0));
+        }
+        for (Pharmacy pharmacy : pharmacyList) {
+            pharmacy.setVamFactor(0);
+        }
+        //calculatedPharmacy.setVamFactor(0);
+        for (Manufacturer manufacturer : manufacturerList) {
+            manufacturer.setVamFactor(0);
         }
 
     }
 
     public int getUnrealisedTransaction(Pharmacy pharmacy) {
-        int toBuy =pharmacy.getNeed();
+        int toBuy = pharmacy.getNeed();
         for (Connection connection : pharmacy.getConnectionList()) {
             toBuy -= connection.getQuantity();
         }
@@ -129,8 +151,12 @@ public class VAM implements IVAM {
 
     public int getUnrealisedSell(Manufacturer manufacturer) {
         int vaccRest = manufacturer.getDaily_production();
-        for (Connection connection : manufacturer.getConnectionList()) {
-            vaccRest -= connection.getQuantity();
+        for (Pharmacy pharmacy : pharmacyList) {
+            for (Connection connection : pharmacy.getConnectionList()) {
+                if (connection.getManufacturer().equals(manufacturer)) {
+                    vaccRest -= connection.getQuantity();
+                }
+            }
         }
         return vaccRest;
     }

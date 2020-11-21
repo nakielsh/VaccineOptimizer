@@ -3,7 +3,7 @@ package vaccine.objects;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pharmacy extends Company{
+public class Pharmacy extends Company {
     private int id;
     private String name;
     private int need;
@@ -32,7 +32,7 @@ public class Pharmacy extends Company{
         return connectionList;
     }
 
-    public void addConnection(Manufacturer manufacturer,Pharmacy pharmacy, int quantity, double price) {
+    public void addConnection(Manufacturer manufacturer, Pharmacy pharmacy, int quantity, double price) {
         connectionList.add(new Connection(manufacturer, pharmacy, quantity, price));
     }
 

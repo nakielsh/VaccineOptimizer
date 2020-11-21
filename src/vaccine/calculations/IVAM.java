@@ -1,11 +1,6 @@
 package vaccine.calculations;
 
 import vaccine.objects.Company;
-import vaccine.objects.Connection;
-import vaccine.objects.Manufacturer;
-import vaccine.objects.Pharmacy;
-
-import java.util.List;
 
 public interface IVAM {
 

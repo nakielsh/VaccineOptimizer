@@ -21,7 +21,7 @@ public class Company {
         return connectionList;
     }
 
-    public void addConnection(Manufacturer manufacturer,Pharmacy pharmacy, int quantity, double price) {
+    public void addConnection(Manufacturer manufacturer, Pharmacy pharmacy, int quantity, double price) {
         connectionList.add(new Connection(manufacturer, pharmacy, quantity, price));
     }
 

@@ -34,6 +34,7 @@ public class Main {
                         "\n");
             }
         }
+
         System.out.println(vam.findGreatestVAMFactor().getName());
     }
 }

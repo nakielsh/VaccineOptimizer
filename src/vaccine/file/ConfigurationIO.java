@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static java.lang.Double.parseDouble;
@@ -110,7 +109,6 @@ public class ConfigurationIO {
     }
 
 
-
     public static void main(String[] args) throws IOException {
 
         ConfigurationIO configurationIO = new ConfigurationIO();
@@ -144,8 +142,6 @@ public class ConfigurationIO {
             }
 
         }
-
-
 
 
     }
