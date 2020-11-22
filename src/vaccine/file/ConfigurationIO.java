@@ -29,7 +29,11 @@ public class ConfigurationIO {
             if (isManufacturersInfo(line)) {
                 while (true) {
                     line = reader.readLine();
-                    if (line == null || isPharmaciesInfo(line) || isConnectionsInfo(line)) break;
+                    if (line == null) break;
+                    if (line.isBlank())
+                        line = reader.readLine();
+                    if (line.equals(null) || isPharmaciesInfo(line) || isConnectionsInfo(line)) break;
+
 
                     parseManufacturersLine(line);
                 }
@@ -38,7 +42,11 @@ public class ConfigurationIO {
             if (isPharmaciesInfo(line)) {
                 while (true) {
                     line = reader.readLine();
-                    if (line == null || isManufacturersInfo(line) || isConnectionsInfo(line)) break;
+                    if (line == null) break;
+                    if (line.isBlank())
+                        line = reader.readLine();
+                    if (line.equals(null) || isManufacturersInfo(line) || isConnectionsInfo(line)) break;
+
 
                     parsePharmaciesLine(line);
                 }
@@ -47,7 +55,11 @@ public class ConfigurationIO {
             if (isConnectionsInfo(line)) {
                 while (true) {
                     line = reader.readLine();
-                    if (line == null || isManufacturersInfo(line) || isPharmaciesInfo(line)) break;
+                    if (line == null) break;
+                    if (line.isBlank())
+                        line = reader.readLine();
+                    if (line.equals(null) || isManufacturersInfo(line) || isPharmaciesInfo(line)) break;
+
 
                     parseConnectionsLine(line);
                 }
@@ -107,44 +119,4 @@ public class ConfigurationIO {
     public List<Manufacturer> getManufacturerList() {
         return manufacturerList;
     }
-
-
-    public static void main(String[] args) throws IOException {
-
-        ConfigurationIO configurationIO = new ConfigurationIO();
-        configurationIO.loadFromFile(configurationIO.path);
-        for (Pharmacy pharmacy : configurationIO.pharmacyList) {
-            System.out.println("ID: " + pharmacy.getId() +
-                    ", NAME: " + pharmacy.getName() +
-                    ", NEED: " + pharmacy.getNeed() +
-                    "\n");
-            for (Connection connection : pharmacy.getConnectionList()) {
-                System.out.println("\tMANUFACTURER: " + connection.getManufacturer().getName() +
-                        ", MAX QUANTITY: " + connection.getMaxQuantity() +
-                        ", PRICE: " + connection.getPrice() +
-                        ", QUANTITY: " + connection.getQuantity() +
-                        "\n");
-            }
-        }
-        System.out.println("\n\n");
-
-        for (Manufacturer manufacturer : configurationIO.manufacturerList) {
-            System.out.println("ID: " + manufacturer.getId() +
-                    ", NAME: " + manufacturer.getName() +
-                    ", PRODUCTION: " + manufacturer.getDaily_production() +
-                    "\n");
-            for (Connection connection : manufacturer.getConnectionList()) {
-                System.out.println("\tMANUFACTURER: " + connection.getManufacturer().getName() +
-                        ", MAX QUANTITY: " + connection.getMaxQuantity() +
-                        ", PRICE: " + connection.getPrice() +
-                        ", QUANTITY: " + connection.getQuantity() +
-                        "\n");
-            }
-
-        }
-
-
-    }
-
-
 }

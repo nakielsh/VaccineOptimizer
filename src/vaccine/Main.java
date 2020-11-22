@@ -31,7 +31,7 @@ public class Main {
                 }
             }
         }
-        System.out.println("Opłaty całkowite: " + sum + " zł");
+        System.out.println("\nOpłaty całkowite: " + sum + " zł");
 
     }
 }

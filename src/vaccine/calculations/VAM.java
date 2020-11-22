@@ -185,8 +185,4 @@ public class VAM implements IVAM {
     public List<Pharmacy> getPharmacyList() {
         return pharmacyList;
     }
-
-    public List<Manufacturer> getManufacturerList() {
-        return manufacturerList;
-    }
 }
