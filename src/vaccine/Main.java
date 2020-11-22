@@ -18,23 +18,20 @@ public class Main {
         configurationIO.loadFromFile(path);
         VAM vam = new VAM(configurationIO.getPharmacyList(), configurationIO.getManufacturerList());
         vam.minimizeCost();
+        double sum = 0;
+        String format = "%-25s%s%n";
 
         for (Pharmacy pharmacy : vam.getPharmacyList()) {
-            System.out.println("ID: " + pharmacy.getId() +
-                    ", NAME: " + pharmacy.getName() +
-                    ", NEED: " + pharmacy.getNeed() +
-                    ", VAM: " + pharmacy.getVamFactor() +
-                    "\n");
             for (Connection connection : pharmacy.getConnectionList()) {
-                System.out.println("\tMANUFACTURER: " + connection.getManufacturer().getName() +
-                        ", PHARMACY: " + connection.getPharmacy().getName() +
-                        ", MAX QUANTITY: " + connection.getMaxQuantity() +
-                        ", QUANTITY: " + connection.getQuantity() +
-                        ", PRICE: " + connection.getPrice() +
-                        "\n");
+                if (connection.getQuantity() > 0) {
+                    sum += connection.getQuantity() * connection.getPrice();
+                    System.out.printf(format, connection.getManufacturer().getName(), "-> " + pharmacy.getName() +
+                            " [Koszt = " + connection.getQuantity() + " * " + connection.getPrice() + " = " +
+                            connection.getQuantity() * connection.getPrice() + " zł]");
+                }
             }
         }
+        System.out.println("Opłaty całkowite: " + sum + " zł");
 
-        System.out.println(vam.findGreatestVAMFactor().getName());
     }
 }
