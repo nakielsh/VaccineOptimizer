@@ -143,6 +143,7 @@ public class ConfigurationIO {
             List<Integer> pharmId = new ArrayList<>();
             List<Integer> manId = new ArrayList<>();
 
+/*
             for (Pharmacy pharmacy : pharmacyList) {
                 if (pharmNames.contains(pharmacy.getName()))
                     throw new ExistingNameException("Same pharmacies " + pharmacy.getName());
@@ -153,6 +154,9 @@ public class ConfigurationIO {
                     throw new ExistingNameException("Same manufacturers " + manufacturer.getName());
                 manNames.add(manufacturer.getName());
             }
+
+ */
+
 
             for (Pharmacy pharmacy : pharmacyList) {
                 if (pharmId.contains(pharmacy.getId()))
@@ -182,7 +186,7 @@ public class ConfigurationIO {
                 throw new ConfigurationImpossibleToCreateException("Pharmacy need is greater than its sum of max " +
                         "quantities for every manufacturer. Pharmacy: " + checkPossibleToCreate().getName());
 
-        } catch (HigherNeedThanProductionException | WrongConnectionNumberException | ExistingIdException | ConfigurationImpossibleToCreateException | ExistingNameException e) {
+        } catch (HigherNeedThanProductionException | WrongConnectionNumberException | ExistingIdException | ConfigurationImpossibleToCreateException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -200,7 +204,6 @@ public class ConfigurationIO {
         }
         return pharmNeed > manProd;
     }
-
 
 
     private Pharmacy checkPossibleToCreate() {

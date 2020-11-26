@@ -2,7 +2,6 @@ package vaccine;
 
 import vaccine.calculations.VAM;
 import vaccine.file.ConfigurationIO;
-import vaccine.objects.Connection;
 import vaccine.objects.Manufacturer;
 import vaccine.objects.Pharmacy;
 
@@ -15,7 +14,7 @@ public class Main {
         ConfigurationIO configurationIO = new ConfigurationIO();
         long comparisonEnd;
         long comparisonStart;
-        long time = 0;
+        long time;
 
         System.out.println("Enter file path: ");
         Scanner sc = new Scanner(System.in);
@@ -33,28 +32,19 @@ public class Main {
         int need = 0;
         int got = 0;
         for (Pharmacy pharmacy : vam.getPharmacyList()) {
-            int sum = 0;
             need += pharmacy.getNeed();
+            got += pharmacy.getNeed() - pharmacy.leftToLoad();
             System.out.println(pharmacy.getName() + " (Need): " + pharmacy.getNeed());
-            for (Connection connection : pharmacy.getConnectionList()) {
-                sum += connection.getQuantity();
-                got += connection.getQuantity();
-            }
-            System.out.println("\t" + sum );
+            System.out.println("\t" + pharmacy.leftToLoad());
+        }
+
+        for (Manufacturer manufacturer : vam.getManufacturerList()) {
+            System.out.println(manufacturer.getName() + " (production): " + manufacturer.getDaily_production());
+            System.out.println("\t" + manufacturer.leftToSell());
         }
 
         System.out.println("Need: " + need);
         System.out.println("Got: " + got);
-
-        for(Manufacturer manufacturer: vam.getManfacturerList()){
-            int sum = 0;
-            System.out.println(manufacturer.getName() + " (production): " + manufacturer.getDaily_production());
-            for(Connection connection: manufacturer.getConnectionList()){
-                sum+= connection.getQuantity();
-            }
-            System.out.println("\t" + sum );
-        }
-
 
     }
 }

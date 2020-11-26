@@ -3,6 +3,7 @@
 ._mac/
 .out/
 .codestyles/
+/src/vaccine/result/result.txt
 *.aux
 *.gz
 *.log

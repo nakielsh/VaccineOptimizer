@@ -10,6 +10,7 @@ public class Manufacturer extends Company {
     private int daily_production;
     private List<Connection> connectionList = new ArrayList<>();
     private double vamFactor;
+    private int sold = 0;
 
     public Manufacturer(int id, String name, int daily_production) {
         this.id = id;
@@ -44,4 +45,13 @@ public class Manufacturer extends Company {
     public void setVamFactor(double vamFactor) {
         this.vamFactor = vamFactor;
     }
+
+    public void addSold(int curSold){
+        sold += curSold;
+    }
+
+    public int leftToSell(){
+        return daily_production - sold;
+    }
 }
+

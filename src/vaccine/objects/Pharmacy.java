@@ -7,6 +7,7 @@ public class Pharmacy extends Company {
     private int id;
     private String name;
     private int need;
+    private int bought = 0;
     private List<Connection> connectionList = new ArrayList<>();
     private double vamFactor;
 
@@ -42,5 +43,13 @@ public class Pharmacy extends Company {
 
     public void setVamFactor(double vamFactor) {
         this.vamFactor = vamFactor;
+    }
+
+    public void addBought(int curBought){
+        bought += curBought;
+    }
+
+    public int leftToLoad(){
+        return need - bought;
     }
 }

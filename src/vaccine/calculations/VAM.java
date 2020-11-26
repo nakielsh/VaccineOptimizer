@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class VAM implements IVAM {
+public class VAM {
 
     private List<Pharmacy> pharmacyList;
     private List<Manufacturer> manufacturerList;
@@ -19,7 +19,6 @@ public class VAM implements IVAM {
         this.manufacturerList = manufacturerList;
     }
 
-    @Override
     public void minimizeCost() {
 
         for (int i = 0; i < pharmacyList.size(); i++) {
@@ -28,13 +27,12 @@ public class VAM implements IVAM {
         }
     }
 
-    @Override
     public void calculateVAMFactor() {
         List<Double> prices = new ArrayList<>();
 
         for (Pharmacy pharmacy : pharmacyList) {
             for (Connection connection : pharmacy.getConnectionList()) {
-                if (connection.getQuantity() == 0 && getUnrealisedTransaction(pharmacy) > 0) {
+                if (connection.getQuantity() == 0 && pharmacy.leftToLoad() > 0) {
                     prices.add(connection.getPrice());
                 }
             }
@@ -50,12 +48,10 @@ public class VAM implements IVAM {
         }
 
         for (Manufacturer manufacturer : manufacturerList) {
-            for (Pharmacy pharmacy : pharmacyList) {
-                for (Connection connection : pharmacy.getConnectionList()) {
-                    if (connection.getManufacturer().equals(manufacturer)) {
-                        if (connection.getQuantity() == 0 && getUnrealisedTransaction(pharmacy) > 0) {
-                            prices.add(connection.getPrice());
-                        }
+            for (Connection connection : manufacturer.getConnectionList()) {
+                if (connection.getManufacturer().equals(manufacturer)) {
+                    if (connection.getQuantity() == 0 && connection.getPharmacy().leftToLoad() > 0) {
+                        prices.add(connection.getPrice());
                     }
                 }
             }
@@ -72,13 +68,11 @@ public class VAM implements IVAM {
         }
     }
 
-
-    @Override
     public Company findGreatestVAMFactor() {
         Company withMaxVam = null;
         double max = 0;
         for (Pharmacy pharmacy : pharmacyList) {
-            if (pharmacy.getVamFactor() >= max && getUnrealisedTransaction(pharmacy) > 0) {
+            if (pharmacy.getVamFactor() >= max && pharmacy.leftToLoad() > 0) {
                 max = pharmacy.getVamFactor();
                 withMaxVam = pharmacy;
             }
@@ -93,16 +87,15 @@ public class VAM implements IVAM {
         return withMaxVam;
     }
 
-    @Override
     public void adjustPossibleQuantity(Company company) {
-        Pharmacy calculatedPharmacy = company.getConnectionList().get(0).getPharmacy();
-        Connection actualConnection = company.getConnectionList().get(0);
-        double minPrice = company.getConnectionList().get(0).getPrice();
+        Pharmacy calculatedPharmacy = null;
+        Connection actualConnection = null;
+        double minPrice = 1000000000;
         double maxPrice = 0;
 
 
         for (Pharmacy pharmacy : pharmacyList) {
-            if (getUnrealisedTransaction(pharmacy) > 0) {
+            if (pharmacy.leftToLoad() > 0) {
                 for (Connection connection : pharmacy.getConnectionList()) {
                     if (connection.getManufacturer().equals(company) || connection.getPharmacy().equals(company)) {
                         if (connection.getPrice() > maxPrice)
@@ -112,8 +105,9 @@ public class VAM implements IVAM {
             }
         }
 
+
         for (Pharmacy pharmacy : pharmacyList) {
-            if (getUnrealisedTransaction(pharmacy) > 0) {
+            if (pharmacy.leftToLoad() > 0) {
                 for (Connection connection : pharmacy.getConnectionList()) {
                     if (connection.getManufacturer().equals(company) || connection.getPharmacy().equals(company)) {
                         if (connection.getPrice() <= minPrice && connection.getMaxQuantity() > 0) {
@@ -125,81 +119,42 @@ public class VAM implements IVAM {
                 }
             }
         }
-        minPrice = maxPrice;
 
-        while (getUnrealisedTransaction(calculatedPharmacy) > 0) {
+        if (calculatedPharmacy == null)
+            return;
 
+        while (calculatedPharmacy.leftToLoad() > 0) {
+
+            minPrice = maxPrice;
             for (Connection connection : calculatedPharmacy.getConnectionList()) {
-                if (connection.getPrice() <= minPrice && connection.getMaxQuantity() > 0 && connection.getQuantity() == 0 && getUnrealisedTransaction(calculatedPharmacy) > 0 && getUnrealisedSell(connection.getManufacturer()) > 0) {
+                if (connection.getPrice() <= minPrice && connection.getMaxQuantity() > 0 && connection.getQuantity() == 0
+                        && calculatedPharmacy.leftToLoad() > 0 && connection.getManufacturer().leftToSell() > 0) {
                     minPrice = connection.getPrice();
                     actualConnection = connection;
                 }
             }
-            minPrice = maxPrice;
+
 
             List<Integer> doNotExceed = new ArrayList<>();
             doNotExceed.add(calculatedPharmacy.getNeed());
             doNotExceed.add(actualConnection.getMaxQuantity());
-            doNotExceed.add(getUnrealisedTransaction(calculatedPharmacy));
-            doNotExceed.add(getUnrealisedSell(actualConnection.getManufacturer()));
+            doNotExceed.add(calculatedPharmacy.leftToLoad());
+            doNotExceed.add(actualConnection.getManufacturer().leftToSell());
             Collections.sort(doNotExceed);
 
             actualConnection.setQuantity(doNotExceed.get(0));
+            calculatedPharmacy.addBought(doNotExceed.get(0));
+            actualConnection.getManufacturer().addSold(doNotExceed.get(0));
 
-            for(Connection connection: actualConnection.getManufacturer().getConnectionList()){
-                if(connection.getPharmacy().equals(calculatedPharmacy))
-                    connection.setQuantity(doNotExceed.get(0));
-            }
-        }
-
-        for (Pharmacy pharmacy : pharmacyList) {
-            pharmacy.setVamFactor(0);
-        }
-        for (Manufacturer manufacturer : manufacturerList) {
-            manufacturer.setVamFactor(0);
         }
     }
-
-    public int getUnrealisedTransaction(Pharmacy pharmacy) {
-        int toBuy = pharmacy.getNeed();
-        for (Connection connection : pharmacy.getConnectionList()) {
-            toBuy -= connection.getQuantity();
-        }
-        return toBuy;
-    }
-
-    public int getUnrealisedSell(Manufacturer manufacturer) {
-        int vaccRest = manufacturer.getDaily_production();
-        for (Pharmacy pharmacy : pharmacyList) {
-            for (Connection connection : pharmacy.getConnectionList()) {
-                if (connection.getManufacturer().equals(manufacturer)) {
-                    vaccRest -= connection.getQuantity();
-                }
-            }
-        }
-        return vaccRest;
-    }
-
-    private boolean sholudStillCalculate(){
-        int need = 0;
-        int got = 0;
-        for (Pharmacy pharmacy : pharmacyList) {
-            need += pharmacy.getNeed();
-            for (Connection connection : pharmacy.getConnectionList()) {
-                got += connection.getQuantity();
-            }
-
-        }
-        return need==got? false: true;
-    }
-
 
 
     public List<Pharmacy> getPharmacyList() {
         return pharmacyList;
     }
 
-    public List<Manufacturer> getManfacturerList() {
+    public List<Manufacturer> getManufacturerList() {
         return manufacturerList;
     }
 }
