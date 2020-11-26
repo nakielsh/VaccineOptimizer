@@ -4,13 +4,13 @@ import vaccine.objects.Company;
 
 public interface IVAM {
 
-    public void minimizeCost();
+    void minimizeCost();
 
-    public void calculateVAMFactor();
+    void calculateVAMFactor();
 
-    public Object findGreatestVAMFactor();
+    Object findGreatestVAMFactor();
 
-    public void adjustPossibleQuantity(Company company);
+    void adjustPossibleQuantity(Company company);
 
-    public void generateConfigurationToFile();
+
 }

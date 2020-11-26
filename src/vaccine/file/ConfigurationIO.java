@@ -5,9 +5,7 @@ import vaccine.objects.Connection;
 import vaccine.objects.Manufacturer;
 import vaccine.objects.Pharmacy;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,6 +142,7 @@ public class ConfigurationIO {
             List<String> manNames = new ArrayList<>();
             List<Integer> pharmId = new ArrayList<>();
             List<Integer> manId = new ArrayList<>();
+
             for (Pharmacy pharmacy : pharmacyList) {
                 if (pharmNames.contains(pharmacy.getName()))
                     throw new ExistingNameException("Same pharmacies " + pharmacy.getName());
@@ -154,6 +153,7 @@ public class ConfigurationIO {
                     throw new ExistingNameException("Same manufacturers " + manufacturer.getName());
                 manNames.add(manufacturer.getName());
             }
+
             for (Pharmacy pharmacy : pharmacyList) {
                 if (pharmId.contains(pharmacy.getId()))
                     throw new ExistingIdException("Same pharmacies id's " + pharmacy.getId());
@@ -178,11 +178,11 @@ public class ConfigurationIO {
             if (isHigherNeedThanProduction())
                 throw new HigherNeedThanProductionException("There is a higher daily need than daily production");
 
-            if(checkPossibleToCreate() != null)
+            if (checkPossibleToCreate() != null)
                 throw new ConfigurationImpossibleToCreateException("Pharmacy need is greater than its sum of max " +
                         "quantities for every manufacturer. Pharmacy: " + checkPossibleToCreate().getName());
 
-        } catch (ExistingNameException | HigherNeedThanProductionException | WrongConnectionNumberException | ExistingIdException | ConfigurationImpossibleToCreateException e) {
+        } catch (HigherNeedThanProductionException | WrongConnectionNumberException | ExistingIdException | ConfigurationImpossibleToCreateException | ExistingNameException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -201,10 +201,12 @@ public class ConfigurationIO {
         return pharmNeed > manProd;
     }
 
-    private Pharmacy checkPossibleToCreate(){
-        for(Pharmacy pharmacy: pharmacyList){
+
+
+    private Pharmacy checkPossibleToCreate() {
+        for (Pharmacy pharmacy : pharmacyList) {
             int pharmMaxQuantity = 0;
-            for(Connection connection: pharmacy.getConnectionList()){
+            for (Connection connection : pharmacy.getConnectionList()) {
                 pharmMaxQuantity += connection.getMaxQuantity();
             }
             if (pharmacy.getNeed() > pharmMaxQuantity) return pharmacy;
@@ -212,7 +214,30 @@ public class ConfigurationIO {
         return null;
     }
 
-    public void saveToFile(List<Pharmacy> pharmacyList) {
+    public void saveToFile(List<Pharmacy> pharmacyList) throws FileNotFoundException {
+        double sum = 0;
+        String format = "%-25s%s%n";
+        File file = new File("./src/vaccine/result/result.txt");
+        PrintWriter writer = new PrintWriter(file);
+
+
+        for (Pharmacy pharmacy : pharmacyList) {
+            for (Connection connection : pharmacy.getConnectionList()) {
+                if (connection.getQuantity() > 0) {
+                    sum += connection.getQuantity() * connection.getPrice();
+                    writer.printf(format, connection.getManufacturer().getName(), "-> " + pharmacy.getName() +
+                            " [Koszt = " + connection.getQuantity() + " * " + connection.getPrice() + " = " +
+                            String.format("%.2f", connection.getQuantity() * connection.getPrice()) + " zł]");
+                    System.out.printf(format, connection.getManufacturer().getName(), "-> " + pharmacy.getName() +
+                            " [Koszt = " + connection.getQuantity() + " * " + connection.getPrice() + " = " +
+                            String.format("%.2f", connection.getQuantity() * connection.getPrice()) + " zł]");
+                }
+            }
+        }
+        writer.println("\nOpłaty całkowite: " + String.format("%.2f", sum) + " zł");
+        System.out.println("\nOpłaty całkowite: " + String.format("%.2f", sum) + " zł");
+        writer.close();
+
     }
 
     public List<Pharmacy> getPharmacyList() {

@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class VAM implements IVAM {
-    //public ConfigurationIO configurationIO = new ConfigurationIO();
 
     private List<Pharmacy> pharmacyList;
     private List<Manufacturer> manufacturerList;
@@ -22,11 +21,11 @@ public class VAM implements IVAM {
 
     @Override
     public void minimizeCost() {
+
         for (int i = 0; i < pharmacyList.size(); i++) {
             calculateVAMFactor();
             adjustPossibleQuantity(findGreatestVAMFactor());
         }
-
     }
 
     @Override
@@ -41,9 +40,9 @@ public class VAM implements IVAM {
             }
             int n = prices.size();
             Collections.sort(prices);
-            if (prices.size() > 1)
+            if (n > 1)
                 pharmacy.setVamFactor(prices.get(1) - prices.get(0));
-            else if (prices.size() == 1)
+            else if (n == 1)
                 pharmacy.setVamFactor(prices.get(0));
             else
                 pharmacy.setVamFactor(0);
@@ -62,9 +61,9 @@ public class VAM implements IVAM {
             }
             int n = prices.size();
             Collections.sort(prices);
-            if (prices.size() > 1)
+            if (n > 1)
                 manufacturer.setVamFactor(prices.get(1) - prices.get(0));
-            else if (prices.size() == 1)
+            else if (n == 1)
                 manufacturer.setVamFactor(0);
             else
                 manufacturer.setVamFactor(0);
@@ -146,6 +145,11 @@ public class VAM implements IVAM {
             Collections.sort(doNotExceed);
 
             actualConnection.setQuantity(doNotExceed.get(0));
+
+            for(Connection connection: actualConnection.getManufacturer().getConnectionList()){
+                if(connection.getPharmacy().equals(calculatedPharmacy))
+                    connection.setQuantity(doNotExceed.get(0));
+            }
         }
 
         for (Pharmacy pharmacy : pharmacyList) {
@@ -154,7 +158,6 @@ public class VAM implements IVAM {
         for (Manufacturer manufacturer : manufacturerList) {
             manufacturer.setVamFactor(0);
         }
-
     }
 
     public int getUnrealisedTransaction(Pharmacy pharmacy) {
@@ -177,12 +180,26 @@ public class VAM implements IVAM {
         return vaccRest;
     }
 
-    @Override
-    public void generateConfigurationToFile() {
+    private boolean sholudStillCalculate(){
+        int need = 0;
+        int got = 0;
+        for (Pharmacy pharmacy : pharmacyList) {
+            need += pharmacy.getNeed();
+            for (Connection connection : pharmacy.getConnectionList()) {
+                got += connection.getQuantity();
+            }
 
+        }
+        return need==got? false: true;
     }
+
+
 
     public List<Pharmacy> getPharmacyList() {
         return pharmacyList;
+    }
+
+    public List<Manufacturer> getManfacturerList() {
+        return manufacturerList;
     }
 }
