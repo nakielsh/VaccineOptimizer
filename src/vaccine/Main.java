@@ -4,11 +4,10 @@ import vaccine.calculations.VAM;
 import vaccine.file.ConfigurationIO;
 import vaccine.objects.Pharmacy;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         ConfigurationIO configurationIO = new ConfigurationIO();
         long comparisonEnd;
         long comparisonStart;

@@ -8,6 +8,7 @@ import vaccine.objects.Pharmacy;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
@@ -17,57 +18,61 @@ public class ConfigurationIO {
     List<Manufacturer> manufacturerList = new ArrayList<>();
     List<Pharmacy> pharmacyList = new ArrayList<>();
 
-    public void loadFromFile(String path) throws IOException {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(path));
+    public void loadFromFile(String path) throws Exception {
+        // try {
+        BufferedReader reader = new BufferedReader(new FileReader(path));
 
-            while (true) {
-                String line = reader.readLine();
-                if (line == null) break;
+        while (true) {
+            String line = reader.readLine();
+            if (line == null) break;
 
-                if (isManufacturersInfo(line)) {
-                    while (true) {
+            if (isManufacturersInfo(line)) {
+                while (true) {
+                    line = reader.readLine();
+                    if (line == null) break;
+                    if (line.isBlank())
                         line = reader.readLine();
-                        if (line == null) break;
-                        if (line.isBlank())
-                            line = reader.readLine();
-                        if (line.equals(null) || isPharmaciesInfo(line) || isConnectionsInfo(line)) break;
+                    if (isPharmaciesInfo(line) || isConnectionsInfo(line)) break;
 
 
-                        parseManufacturersLine(line);
-                    }
+                    parseManufacturersLine(line);
                 }
-
-                if (isPharmaciesInfo(line)) {
-                    while (true) {
-                        line = reader.readLine();
-                        if (line == null) break;
-                        if (line.isBlank())
-                            line = reader.readLine();
-                        if (line.equals(null) || isManufacturersInfo(line) || isConnectionsInfo(line)) break;
-
-
-                        parsePharmaciesLine(line);
-                    }
-                }
-
-                if (isConnectionsInfo(line)) {
-                    while (true) {
-                        line = reader.readLine();
-                        if (line == null) break;
-                        if (line.isBlank())
-                            line = reader.readLine();
-                        if (line.equals(null) || isManufacturersInfo(line) || isPharmaciesInfo(line)) break;
-
-
-                        parseConnectionsLine(line);
-                    }
-                } else throw new FileStructureException("Błędny nagłówek");
             }
-            reader.close();
-        } catch (FileStructureException e) {
+
+            if (line == null) break;
+            if (isPharmaciesInfo(line)) {
+                while (true) {
+                    line = reader.readLine();
+                    if (line == null) break;
+                    if (line.isBlank())
+                        line = reader.readLine();
+                    if (isManufacturersInfo(line) || isConnectionsInfo(line)) break;
+
+
+                    parsePharmaciesLine(line);
+                }
+            }
+
+            if (line == null) break;
+            if (isConnectionsInfo(line)) {
+                while (true) {
+                    line = reader.readLine();
+                    if (line == null) break;
+                    if (line.isBlank())
+                        line = reader.readLine();
+                    if (isManufacturersInfo(line) || isPharmaciesInfo(line)) break;
+
+
+                    parseConnectionsLine(line);
+                }
+            } else throw new FileStructureException("Błędny nagłówek");
+        }
+        reader.close();
+        /*} catch (IOException e) {
             e.printStackTrace();
         }
+
+         */
         checkGeneratedObjects();
 
     }
@@ -85,111 +90,111 @@ public class ConfigurationIO {
                 " dzienna maksymalna liczba dostarczanych szczepionek | koszt szczepionki [zł] )");
     }
 
-    private void parseManufacturersLine(String line) {
-        try {
-            String[] args = line.split(" \\| ");
-            if (args.length != 3)
-                throw new FileStructureException("Wrong arguments separation or wrong arguments " +
-                        "number in Manufacturers header");
+    private void parseManufacturersLine(String line) throws FileStructureException {
+        String[] args = line.split(" \\| ");
+        if (args.length != 3)
+            throw new FileStructureException("Wrong arguments separation or wrong arguments " +
+                    "number in Manufacturers header");
 
-            Manufacturer temp = new Manufacturer(parseInt(args[0]), args[1], parseInt(args[2]));
-            manufacturerList.add(temp);
-        } catch (FileStructureException e) {
-            e.printStackTrace();
-            System.exit(1);
+        Manufacturer temp = new Manufacturer(parseInt(args[0]), args[1], parseInt(args[2]));
+        manufacturerList.add(temp);
+
+    }
+
+    private void parsePharmaciesLine(String line) throws FileStructureException {
+        String[] args = line.split(" \\| ");
+        if (args.length != 3)
+            throw new FileStructureException("Wrong arguments separation or wrong arguments " +
+                    "number in Pharmacies header");
+        Pharmacy temp = new Pharmacy(parseInt(args[0]), args[1], parseInt(args[2]));
+        pharmacyList.add(temp);
+    }
+
+    private void parseConnectionsLine(String line) throws FileStructureException {
+        String[] args = line.split(" \\| ");
+        if (args.length != 4)
+            throw new FileStructureException("Wrong arguments separation or wrong arguments " +
+                    "number in Connections header");
+        for (Pharmacy pharmacy : pharmacyList) {
+            if (pharmacy.getId() == parseInt(args[1])) {
+
+                for (Manufacturer manufacturer : manufacturerList)
+                    if (manufacturer.getId() == parseInt(args[0])) {
+                        pharmacy.addConnection(manufacturer, pharmacy, parseInt(args[2]), parseDouble(args[3]));
+                        manufacturer.addConnection(manufacturer, pharmacy, parseInt(args[2]), parseDouble(args[3]));
+                    }
+            }
         }
     }
 
-    private void parsePharmaciesLine(String line) {
-        try {
-            String[] args = line.split(" \\| ");
-            if (args.length != 3)
-                throw new FileStructureException("Wrong arguments separation or wrong arguments " +
-                        "number in Pharmacies header");
-            Pharmacy temp = new Pharmacy(parseInt(args[0]), args[1], parseInt(args[2]));
-            pharmacyList.add(temp);
-        } catch (FileStructureException e) {
-            e.printStackTrace();
-            System.exit(1);
+    private void checkGeneratedObjects() throws Exception {
+        List<String> pharmNames = new ArrayList<>();
+        List<String> manNames = new ArrayList<>();
+        List<Integer> pharmId = new ArrayList<>();
+        List<Integer> manId = new ArrayList<>();
+
+        int countConnections = 0;
+
+
+        for (Pharmacy pharmacy : pharmacyList) {
+            if (pharmNames.contains(pharmacy.getName()))
+                throw new ExistingNameException("Same pharmacies " + pharmacy.getName());
+
+            pharmNames.add(pharmacy.getName());
+
+            if (pharmId.contains(pharmacy.getId()))
+                throw new ExistingIdException("Same pharmacies id's " + pharmacy.getId());
+
+            pharmId.add(pharmacy.getId());
+
+            if(pharmacy.getId() < 0)
+                throw new FileStructureException("ID of pharmacy: " + pharmacy.getName() + " is less than 0");
+
+            if(pharmacy.getNeed() < 0)
+                throw new FileStructureException("Need of pharmacy: " + pharmacy.getName() + " is less than 0");
+
+            for (Connection connection : pharmacy.getConnectionList()) {
+                if(connection.getMaxQuantity() < 0)
+                    throw new FileStructureException("MaxQuantity for connection: " + pharmacy.getName() + " and " +
+                            connection.getManufacturer() + " is less than 0");
+
+                if(connection.getPrice() < 0)
+                    throw new FileStructureException("Price for connection: " + pharmacy.getName() + " and " +
+                            connection.getManufacturer() + " is less than 0");
+
+                countConnections++;
+            }
         }
-    }
+        for (Manufacturer manufacturer : manufacturerList) {
+            if (manNames.contains(manufacturer.getName()))
+                throw new ExistingNameException("Same manufacturers " + manufacturer.getName());
 
-    private void parseConnectionsLine(String line) {
-        try {
-            String[] args = line.split(" \\| ");
-            if (args.length != 4)
-                throw new FileStructureException("Wrong arguments separation or wrong arguments " +
-                        "number in Connections header");
-            for (Pharmacy pharmacy : pharmacyList) {
-                if (pharmacy.getId() == parseInt(args[1])) {
+            manNames.add(manufacturer.getName());
 
-                    for (Manufacturer manufacturer : manufacturerList)
-                        if (manufacturer.getId() == parseInt(args[0])) {
-                            pharmacy.addConnection(manufacturer, pharmacy, parseInt(args[2]), parseDouble(args[3]));
-                            manufacturer.addConnection(manufacturer, pharmacy, parseInt(args[2]), parseDouble(args[3]));
-                        }
-                }
-            }
-        } catch (FileStructureException e) {
-            e.printStackTrace();
-            System.exit(1);
+            if (manId.contains(manufacturer.getId()))
+                throw new ExistingIdException("Same manufacturers id's " + manufacturer.getId());
+
+            if(manufacturer.getId() < 0)
+                throw new FileStructureException("ID of manufacturer: " + manufacturer.getName() + " is less than 0");
+
+            if(manufacturer.getDaily_production() < 0)
+                throw new FileStructureException("Daily production of manufacturer: " + manufacturer.getName() + " is less than 0");
+
+            manId.add(manufacturer.getId());
         }
-    }
-
-    private void checkGeneratedObjects() {
-        try {
-            List<String> pharmNames = new ArrayList<>();
-            List<String> manNames = new ArrayList<>();
-            List<Integer> pharmId = new ArrayList<>();
-            List<Integer> manId = new ArrayList<>();
-
-/*
-            for (Pharmacy pharmacy : pharmacyList) {
-                if (pharmNames.contains(pharmacy.getName()))
-                    throw new ExistingNameException("Same pharmacies " + pharmacy.getName());
-                pharmNames.add(pharmacy.getName());
-            }
-            for (Manufacturer manufacturer : manufacturerList) {
-                if (manNames.contains(manufacturer.getName()))
-                    throw new ExistingNameException("Same manufacturers " + manufacturer.getName());
-                manNames.add(manufacturer.getName());
-            }
-
- */
 
 
-            for (Pharmacy pharmacy : pharmacyList) {
-                if (pharmId.contains(pharmacy.getId()))
-                    throw new ExistingIdException("Same pharmacies id's " + pharmacy.getId());
-                pharmId.add(pharmacy.getId());
-            }
-            for (Manufacturer manufacturer : manufacturerList) {
-                if (manId.contains(manufacturer.getId()))
-                    throw new ExistingIdException("Same manufacturers id's " + manufacturer.getId());
-                manId.add(manufacturer.getId());
-            }
-            int countConnections = 0;
-            for (Pharmacy pharmacy : pharmacyList) {
-                for (Connection connection : pharmacy.getConnectionList()) {
-                    countConnections++;
-                }
-            }
+        if (countConnections != pharmacyList.size() * manufacturerList.size())
+            throw new WrongConnectionNumberException("There are " + countConnections +
+                    " connections, while should be " + pharmacyList.size() * manufacturerList.size());
 
-            if (countConnections != pharmacyList.size() * manufacturerList.size())
-                throw new WrongConnectionNumberException("There are " + countConnections +
-                        " connections, while should be " + pharmacyList.size() * manufacturerList.size());
+        if (isHigherNeedThanProduction())
+            throw new HigherNeedThanProductionException("There is a higher daily need than daily production");
 
-            if (isHigherNeedThanProduction())
-                throw new HigherNeedThanProductionException("There is a higher daily need than daily production");
+        if (checkPossibleToCreate() != null)
+            throw new ConfigurationImpossibleToCreateException("Pharmacy need is greater than its sum of max " +
+                    "quantities for every manufacturer. Pharmacy: " + Objects.requireNonNull(checkPossibleToCreate()).getName());
 
-            if (checkPossibleToCreate() != null)
-                throw new ConfigurationImpossibleToCreateException("Pharmacy need is greater than its sum of max " +
-                        "quantities for every manufacturer. Pharmacy: " + checkPossibleToCreate().getName());
-
-        } catch (HigherNeedThanProductionException | WrongConnectionNumberException | ExistingIdException | ConfigurationImpossibleToCreateException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
 
     }
 
