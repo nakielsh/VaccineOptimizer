@@ -49,10 +49,8 @@ public class VAM {
 
         for (Manufacturer manufacturer : manufacturerList) {
             for (Connection connection : manufacturer.getConnectionList()) {
-                if (connection.getManufacturer().equals(manufacturer)) {
-                    if (connection.getQuantity() == 0 && connection.getPharmacy().leftToLoad() > 0) {
-                        prices.add(connection.getPrice());
-                    }
+                if (connection.getQuantity() == 0 && connection.getPharmacy().leftToLoad() > 0) {
+                    prices.add(connection.getPrice());
                 }
             }
             int n = prices.size();
