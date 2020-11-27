@@ -14,7 +14,7 @@ import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 
 public class ConfigurationIO {
-    String path = "/Users/hubertnakielski/Repozytoria/2020Z_AISD_proj_ind_GR1_gr19/src/vaccine/file/przykład_danych.txt";
+
     List<Manufacturer> manufacturerList = new ArrayList<>();
     List<Pharmacy> pharmacyList = new ArrayList<>();
 
@@ -64,7 +64,7 @@ public class ConfigurationIO {
 
                     parseConnectionsLine(line);
                 }
-            } else throw new FileStructureException("Błędny nagłówek");
+            } else throw new FileStructureException("Wrong header");
         }
         reader.close();
 
