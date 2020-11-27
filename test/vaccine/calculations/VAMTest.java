@@ -56,7 +56,7 @@ public class VAMTest {
         VAM vam = new VAM(configurationIO.getPharmacyList(), configurationIO.getManufacturerList());
         vam.minimizeCost();
         //then
-        for(Manufacturer manufacturer: vam.getManufacturerList()){
+        for (Manufacturer manufacturer : vam.getManufacturerList()) {
             assert manufacturer.leftToSell() >= 0;
         }
     }
@@ -70,7 +70,7 @@ public class VAMTest {
         VAM vam = new VAM(configurationIO.getPharmacyList(), configurationIO.getManufacturerList());
         vam.minimizeCost();
         //then
-        for(Manufacturer manufacturer: vam.getManufacturerList()){
+        for (Manufacturer manufacturer : vam.getManufacturerList()) {
             assert manufacturer.leftToSell() >= 0;
         }
     }
@@ -104,12 +104,10 @@ public class VAMTest {
         VAM vam = new VAM(configurationIO.getPharmacyList(), configurationIO.getManufacturerList());
         vam.minimizeCost();
         //then
-        for(Manufacturer manufacturer: vam.getManufacturerList()){
+        for (Manufacturer manufacturer : vam.getManufacturerList()) {
             assert manufacturer.leftToSell() >= 0;
         }
     }
-
-
 
 
 }

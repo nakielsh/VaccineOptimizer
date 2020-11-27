@@ -52,7 +52,6 @@ public class ConfigurationIOTest {
     }
 
 
-
     @Test(expected = FileStructureException.class)
     public void shouldThrowFileStructureExceptionWheIdIsNegative() throws Exception {
         //given
@@ -82,7 +81,6 @@ public class ConfigurationIOTest {
         //then
         assert false;
     }
-
 
 
     @Test(expected = WrongConnectionNumberException.class)

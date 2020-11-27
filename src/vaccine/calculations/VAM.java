@@ -91,19 +91,6 @@ public class VAM {
         Pharmacy calculatedPharmacy = null;
         Connection actualConnection = null;
         double minPrice = 1000000000;
-        double maxPrice = 0;
-
-
-        for (Pharmacy pharmacy : pharmacyList) {
-            if (pharmacy.leftToLoad() > 0) {
-                for (Connection connection : pharmacy.getConnectionList()) {
-                    if (connection.getManufacturer().equals(company) || connection.getPharmacy().equals(company)) {
-                        if (connection.getPrice() > maxPrice)
-                            maxPrice = connection.getPrice();
-                    }
-                }
-            }
-        }
 
 
         for (Pharmacy pharmacy : pharmacyList) {
@@ -125,7 +112,7 @@ public class VAM {
 
         while (calculatedPharmacy.leftToLoad() > 0) {
 
-            minPrice = maxPrice;
+            minPrice = 1000000000;
             for (Connection connection : calculatedPharmacy.getConnectionList()) {
                 if (connection.getPrice() <= minPrice && connection.getMaxQuantity() > 0 && connection.getQuantity() == 0
                         && calculatedPharmacy.leftToLoad() > 0 && connection.getManufacturer().leftToSell() > 0) {
