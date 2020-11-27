@@ -19,7 +19,6 @@ public class ConfigurationIO {
     List<Pharmacy> pharmacyList = new ArrayList<>();
 
     public void loadFromFile(String path) throws Exception {
-        // try {
         BufferedReader reader = new BufferedReader(new FileReader(path));
 
         while (true) {
@@ -68,11 +67,7 @@ public class ConfigurationIO {
             } else throw new FileStructureException("Błędny nagłówek");
         }
         reader.close();
-        /*} catch (IOException e) {
-            e.printStackTrace();
-        }
 
-         */
         checkGeneratedObjects();
 
     }
@@ -147,18 +142,18 @@ public class ConfigurationIO {
 
             pharmId.add(pharmacy.getId());
 
-            if(pharmacy.getId() < 0)
+            if (pharmacy.getId() < 0)
                 throw new FileStructureException("ID of pharmacy: " + pharmacy.getName() + " is less than 0");
 
-            if(pharmacy.getNeed() < 0)
+            if (pharmacy.getNeed() < 0)
                 throw new FileStructureException("Need of pharmacy: " + pharmacy.getName() + " is less than 0");
 
             for (Connection connection : pharmacy.getConnectionList()) {
-                if(connection.getMaxQuantity() < 0)
+                if (connection.getMaxQuantity() < 0)
                     throw new FileStructureException("MaxQuantity for connection: " + pharmacy.getName() + " and " +
                             connection.getManufacturer() + " is less than 0");
 
-                if(connection.getPrice() < 0)
+                if (connection.getPrice() < 0)
                     throw new FileStructureException("Price for connection: " + pharmacy.getName() + " and " +
                             connection.getManufacturer() + " is less than 0");
 
@@ -174,10 +169,10 @@ public class ConfigurationIO {
             if (manId.contains(manufacturer.getId()))
                 throw new ExistingIdException("Same manufacturers id's " + manufacturer.getId());
 
-            if(manufacturer.getId() < 0)
+            if (manufacturer.getId() < 0)
                 throw new FileStructureException("ID of manufacturer: " + manufacturer.getName() + " is less than 0");
 
-            if(manufacturer.getDaily_production() < 0)
+            if (manufacturer.getDaily_production() < 0)
                 throw new FileStructureException("Daily production of manufacturer: " + manufacturer.getName() + " is less than 0");
 
             manId.add(manufacturer.getId());
