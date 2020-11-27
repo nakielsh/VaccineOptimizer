@@ -161,5 +161,41 @@ public class ConfigurationIOTest {
         }
     }
 
+    @Test
+    public void shouldCreate358PharmaciesAnd129ManufacturersWhenGivenBigData() throws Exception {
+        //given
+        String path = "./to_test/bigData.txt";
+        int pharmacyNum = 0;
+        int manufacturerNum = 0;
+        //when
+        configurationIO.loadFromFile(path);
+        for (Pharmacy pharmacy : configurationIO.getPharmacyList()) {
+            pharmacyNum += 1;
+        }
+        for (Manufacturer manufacturer : configurationIO.getManufacturerList()) {
+            manufacturerNum += 1;
+        }
+
+        //then
+        assertEquals(358, pharmacyNum);
+        assertEquals(129, manufacturerNum);
+    }
+
+    @Test
+    public void shouldCreate129ConnectionsForEveryPharmacyWhenGivenBigData() throws Exception {
+        //given
+        String path = "./to_test/bigData.txt";
+        //when
+        configurationIO.loadFromFile(path);
+        //then
+        for (Pharmacy pharmacy : configurationIO.getPharmacyList()) {
+            int connectionNumber = 0;
+            for (Connection connection : pharmacy.getConnectionList()) {
+                connectionNumber += 1;
+            }
+            assertEquals(129, connectionNumber);
+        }
+    }
+
 }
 

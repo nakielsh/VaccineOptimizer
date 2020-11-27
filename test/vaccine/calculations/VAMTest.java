@@ -76,4 +76,40 @@ public class VAMTest {
     }
 
 
+    @Test
+    public void shouldMeetSupplyOfEveryPharmacyWhenGivenBigData() throws Exception {
+        //given
+        String path = "./to_test/bigData.txt";
+        int need = 0;
+        int got = 0;
+        //when
+        configurationIO.loadFromFile(path);
+        VAM vam = new VAM(configurationIO.getPharmacyList(), configurationIO.getManufacturerList());
+        vam.minimizeCost();
+        for (Pharmacy pharmacy : vam.getPharmacyList()) {
+            need += pharmacy.getNeed();
+            got += pharmacy.getNeed() - pharmacy.leftToLoad();
+        }
+        //then
+        assertEquals(need, got);
+    }
+
+
+    @Test
+    public void shouldNotGoAboveManufacturersDailyProductionWhenGivenBigData() throws Exception {
+        //given
+        String path = "./to_test/bigData.txt";
+        //when
+        configurationIO.loadFromFile(path);
+        VAM vam = new VAM(configurationIO.getPharmacyList(), configurationIO.getManufacturerList());
+        vam.minimizeCost();
+        //then
+        for(Manufacturer manufacturer: vam.getManufacturerList()){
+            assert manufacturer.leftToSell() >= 0;
+        }
+    }
+
+
+
+
 }
