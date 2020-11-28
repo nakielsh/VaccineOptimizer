@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Company {
-    private int id;
-    private String name;
-    private List<Connection> connectionList = new ArrayList<>();
-    private double vamFactor;
+    protected int id;
+    protected String name;
+    protected List<Connection> connectionList = new ArrayList<>();
+    protected double vamFactor;
+
+    public Company(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public int getId() {
         return id;

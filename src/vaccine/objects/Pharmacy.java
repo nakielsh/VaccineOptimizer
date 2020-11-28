@@ -4,16 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pharmacy extends Company {
-    private int id;
-    private String name;
-    private int need;
+
+    private final int need;
     private int bought = 0;
-    private List<Connection> connectionList = new ArrayList<>();
+    private final List<Connection> connectionList = new ArrayList<>();
     private double vamFactor;
 
     public Pharmacy(int id, String name, int need) {
-        this.id = id;
-        this.name = name;
+        super(id, name);
         this.need = need;
     }
 

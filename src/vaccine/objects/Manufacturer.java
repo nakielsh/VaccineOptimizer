@@ -5,16 +5,13 @@ import java.util.List;
 
 public class Manufacturer extends Company {
 
-    private int id;
-    private String name;
-    private int daily_production;
-    private List<Connection> connectionList = new ArrayList<>();
+    private final int daily_production;
+    private final List<Connection> connectionList = new ArrayList<>();
     private double vamFactor;
     private int sold = 0;
 
     public Manufacturer(int id, String name, int daily_production) {
-        this.id = id;
-        this.name = name;
+        super(id,name);
         this.daily_production = daily_production;
     }
 
