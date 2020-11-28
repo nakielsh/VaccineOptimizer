@@ -220,7 +220,7 @@ public class ConfigurationIO {
     public void saveToFile(List<Pharmacy> pharmacyList) throws FileNotFoundException {
         double sum = 0;
         String format = "%-25s%s%n";
-        File file = new File("./src/vaccine/result/result.txt");
+        File file = new File("result.txt");
         PrintWriter writer = new PrintWriter(file);
 
 
@@ -231,15 +231,12 @@ public class ConfigurationIO {
                     writer.printf(format, connection.getManufacturer().getName(), "-> " + pharmacy.getName() +
                             " [Koszt = " + connection.getQuantity() + " * " + connection.getPrice() + " = " +
                             String.format("%.2f", connection.getQuantity() * connection.getPrice()) + " zł]");
-                    System.out.printf(format, connection.getManufacturer().getName(), "-> " + pharmacy.getName() +
-                            " [Koszt = " + connection.getQuantity() + " * " + connection.getPrice() + " = " +
-                            String.format("%.2f", connection.getQuantity() * connection.getPrice()) + " zł]");
                 }
             }
         }
         writer.println("\nOpłaty całkowite: " + String.format("%.2f", sum) + " zł");
-        System.out.println("\nOpłaty całkowite: " + String.format("%.2f", sum) + " zł");
         writer.close();
+        System.out.println("The output is saved to: " + file.getAbsolutePath());
 
     }
 

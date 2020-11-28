@@ -119,7 +119,6 @@ public class VAM {
                 }
             }
 
-
             List<Integer> doNotExceed = new ArrayList<>();
             doNotExceed.add(calculatedPharmacy.getNeed());
             doNotExceed.add(actualConnection.getMaxQuantity());
@@ -130,10 +129,8 @@ public class VAM {
             actualConnection.setQuantity(doNotExceed.get(0));
             calculatedPharmacy.addBought(doNotExceed.get(0));
             actualConnection.getManufacturer().addSold(doNotExceed.get(0));
-
         }
     }
-
 
     public List<Pharmacy> getPharmacyList() {
         return pharmacyList;
