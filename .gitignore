@@ -9,3 +9,5 @@
 *.log
 *.xml
 *.out
+/out/artifacts/
+/src/META-INF/

@@ -220,7 +220,7 @@ public class ConfigurationIO {
     public void saveToFile(List<Pharmacy> pharmacyList) throws FileNotFoundException {
         double sum = 0;
         String format = "%-25s%s%n";
-        File file = new File("./src/vaccine/result/result.txt");
+        File file = new File("../2020Z_AISD_proj_ind_GR1_gr19/src/vaccine/result/result.txt");
         PrintWriter writer = new PrintWriter(file);
 
 
