@@ -8,7 +8,6 @@ public class Pharmacy extends Company {
     private final int need;
     private int bought = 0;
     private final List<Connection> connectionList = new ArrayList<>();
-    private double vamFactor;
 
     public Pharmacy(int id, String name, int need) {
         super(id, name);
@@ -23,6 +22,7 @@ public class Pharmacy extends Company {
         return name;
     }
 
+
     public int getNeed() {
         return need;
     }
@@ -30,6 +30,7 @@ public class Pharmacy extends Company {
     public List<Connection> getConnectionList() {
         return connectionList;
     }
+
 
     public void addConnection(Manufacturer manufacturer, Pharmacy pharmacy, int quantity, double price) {
         connectionList.add(new Connection(manufacturer, pharmacy, quantity, price));
@@ -39,15 +40,17 @@ public class Pharmacy extends Company {
         return vamFactor;
     }
 
+
     public void setVamFactor(double vamFactor) {
         this.vamFactor = vamFactor;
     }
 
-    public void addBought(int curBought){
+
+    public void addBought(int curBought) {
         bought += curBought;
     }
 
-    public int leftToLoad(){
+    public int leftToLoad() {
         return need - bought;
     }
 }

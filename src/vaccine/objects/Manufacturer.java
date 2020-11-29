@@ -11,7 +11,7 @@ public class Manufacturer extends Company {
     private int sold = 0;
 
     public Manufacturer(int id, String name, int daily_production) {
-        super(id,name);
+        super(id, name);
         this.daily_production = daily_production;
     }
 
@@ -43,11 +43,12 @@ public class Manufacturer extends Company {
         this.vamFactor = vamFactor;
     }
 
-    public void addSold(int curSold){
+
+    public void addSold(int curSold) {
         sold += curSold;
     }
 
-    public int leftToSell(){
+    public int leftToSell() {
         return daily_production - sold;
     }
 }
