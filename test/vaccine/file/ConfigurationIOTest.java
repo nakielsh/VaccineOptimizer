@@ -9,7 +9,7 @@ import vaccine.objects.Pharmacy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ConfigurationIOTest {
-    private ConfigurationIO configurationIO = new ConfigurationIO();
+    private final ConfigurationIO configurationIO = new ConfigurationIO();
 
     @Test(expected = ExistingIdException.class)
     public void shouldThrowExistingIdExceptionWhenThereAreTheSameIDs() throws Exception {

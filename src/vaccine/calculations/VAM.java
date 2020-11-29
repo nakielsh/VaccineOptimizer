@@ -11,8 +11,8 @@ import java.util.List;
 
 public class VAM {
 
-    private List<Pharmacy> pharmacyList;
-    private List<Manufacturer> manufacturerList;
+    private final List<Pharmacy> pharmacyList;
+    private final List<Manufacturer> manufacturerList;
 
     public VAM(List<Pharmacy> pharmacyList, List<Manufacturer> manufacturerList) {
         this.pharmacyList = pharmacyList;
