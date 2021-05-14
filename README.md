@@ -1,6 +1,6 @@
 # VaccineOptimizer
 
-This program minimalizes costs of vaccine purchase and ensures the supply to all pharmacies.
+This terminal app minimalizes costs of vaccine purchase and ensures the supply to all pharmacies.
 The program should provide the most cost-effective for all pharmacies configuration.
 
 ## Input data
