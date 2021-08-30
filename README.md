@@ -20,10 +20,12 @@ The input file should consist of information about:
    - cost of one vaccine
 
 ```
-# Producenci szczepionek (id | nazwa | dzienna produkcja) 0 | BioTech 2.0 | 900
+# Producenci szczepionek (id | nazwa | dzienna produkcja) 
+0 | BioTech 2.0 | 900
 1 | Eko Polska 2020 | 1300
 2 | Post-Covid Sp. z o.o. | 1100
-# Apteki (id | nazwa | dzienne zapotrzebowanie) 0 | CentMedEko Centrala | 450
+# Apteki (id | nazwa | dzienne zapotrzebowanie) 
+0 | CentMedEko Centrala | 450
 1 | CentMedEko 24h | 690
 2 | CentMedEko Nowogrodzka | 1200
 # Połączenia producentów i aptek (id producenta | id apteki | dzienna maksymalna liczba dostarczanych szczepionek | koszt szczepionki [zł] )
